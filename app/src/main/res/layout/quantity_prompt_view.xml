@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_bg"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/dialog_title_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="FILTERS"
+        android:textColor="@color/blue"
+        android:textSize="18sp"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:layout_margin="2dp"
+        />
+
+    <EditText
+        android:id="@+id/quantity_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:background="@drawable/edit_text_bg1"
+        android:padding="10dp"
+        android:hint="Enter Quantity"/>
+
+   <TextView
+       android:id="@+id/quantity_submit_btn"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Submit"
+       android:textColor="@color/white"
+       android:background="@drawable/btn_bg"
+       android:layout_marginTop="20dp"
+       android:paddingLeft="20dp"
+       android:paddingRight="20dp"
+       android:paddingTop="8dp"
+       android:paddingBottom="8dp"
+       android:layout_gravity="center_horizontal"/>
+</LinearLayout>
