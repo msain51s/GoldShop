@@ -88,7 +88,7 @@ public class CategoryInfoAdapter extends RecyclerView.Adapter<CategoryInfoAdapte
             addToBag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Utils.showQuantityPrompt(ctx,"Product Quantity",getAdapterPosition());
+                    Utils.showQuantityPrompt(ctx,mListData.get(getAdapterPosition()).getPostTitle(),getAdapterPosition(),"Please Enter quantity to order");
                 }
             });
         }

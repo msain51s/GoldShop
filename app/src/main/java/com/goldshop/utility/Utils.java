@@ -216,7 +216,7 @@ public class Utils {
     }
 
 
-    public static void showQuantityPrompt(final Context context, String title, final int position){
+    public static void showQuantityPrompt(final Context context, String title, final int position,String message){
 //        Typeface roboto_ligh=getCustomFont(context, FontType.ROBOTO_MEDIUM);
 
         LayoutInflater inflater=LayoutInflater.from(context);
@@ -225,6 +225,7 @@ public class Utils {
         dialog11.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog11.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog11.setContentView(prompt_view);
+        dialog11.setCancelable(false);
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int width = metrics.widthPixels;
         int height = metrics.heightPixels;
@@ -234,8 +235,12 @@ public class Utils {
         final TextView title_txt= (TextView) prompt_view.findViewById(R.id.dialog_title_text);
         //     title_txt.setTypeface(roboto_ligh);
         title_txt.setText(title);
+        final TextView message_txt= (TextView) prompt_view.findViewById(R.id.dialog_message_text);
+        message_txt.setText(message);
         final EditText quantityEditText= (EditText) prompt_view.findViewById(R.id.quantity_editText);
         TextView submitButton= (TextView) prompt_view.findViewById(R.id.quantity_submit_btn);
+        TextView cancelButton= (TextView) prompt_view.findViewById(R.id.quantity_cancel_btn);
+
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -247,6 +252,13 @@ public class Utils {
                 }else{
                     Toast.makeText(context,"Please Enter Quantity",Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               dialog11.dismiss();
             }
         });
 
