@@ -23,8 +23,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.goldshop.CartActivity;
 import com.goldshop.CategoryInfoActivity;
 import com.goldshop.LoginActivity;
+import com.goldshop.ProductDetailActivity;
 import com.goldshop.R;
 import com.goldshop.adapter.FilterListAdapter;
 import com.leo.simplearcloader.ArcConfiguration;
@@ -216,7 +218,7 @@ public class Utils {
     }
 
 
-    public static void showQuantityPrompt(final Context context, String title, final int position,String message){
+    public static void showQuantityPrompt(final Context context, String title, final int position, String message, final int itemUpdateOrAdd, String quantity, final String from){
 //        Typeface roboto_ligh=getCustomFont(context, FontType.ROBOTO_MEDIUM);
 
         LayoutInflater inflater=LayoutInflater.from(context);
@@ -238,17 +240,28 @@ public class Utils {
         final TextView message_txt= (TextView) prompt_view.findViewById(R.id.dialog_message_text);
         message_txt.setText(message);
         final EditText quantityEditText= (EditText) prompt_view.findViewById(R.id.quantity_editText);
+        quantityEditText.setText(quantity);
         TextView submitButton= (TextView) prompt_view.findViewById(R.id.quantity_submit_btn);
         TextView cancelButton= (TextView) prompt_view.findViewById(R.id.quantity_cancel_btn);
+        if(itemUpdateOrAdd==0){
+            submitButton.setText("Add To Bag");
+        }else if(itemUpdateOrAdd==1){
+            submitButton.setText("Update Quantity");
+        }
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String quantity_value=quantityEditText.getText().toString().trim();
                 if(!quantity_value.equalsIgnoreCase("") && !quantity_value.equalsIgnoreCase("0")){
-                    ((CategoryInfoActivity)context).productAddToCart(position,quantity_value);
+                    if(from.equalsIgnoreCase("CategoryInfo"))
+                    ((CategoryInfoActivity)context).productAddToCart(position,quantity_value,itemUpdateOrAdd);
+                    else if(from.equalsIgnoreCase("CartScreen"))
+                        ((CartActivity)context).editItem(position,quantity_value);
+                    else if(from.equalsIgnoreCase("ProductDetail"))
+                        ((ProductDetailActivity)context).productAddToCart(quantity_value,itemUpdateOrAdd);
                     dialog11.dismiss();
-                    showCommonInfoPrompt(context,"Success","Item added to the Bag successfully !!!");
+
                 }else{
                     Toast.makeText(context,"Please Enter Quantity",Toast.LENGTH_LONG).show();
                 }

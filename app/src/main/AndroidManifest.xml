@@ -50,8 +50,15 @@
         <activity
             android:name=".CartActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ChangePasswordActivity" />
-        <activity android:name=".SignUpVerifyActivity"></activity>
+        <activity android:name=".ChangePasswordActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".SignUpVerifyActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ThanksActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ProductDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

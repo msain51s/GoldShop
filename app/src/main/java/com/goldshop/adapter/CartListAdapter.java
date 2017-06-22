@@ -1,15 +1,23 @@
 package com.goldshop.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.goldshop.CartActivity;
 import com.goldshop.R;
+import com.goldshop.model.CartModel;
 import com.goldshop.model.CategoryInfo;
 import com.goldshop.utility.Utils;
 
@@ -21,9 +29,9 @@ import java.util.List;
 
 public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.MyViewHolder> {
 
-    List<CategoryInfo> mListData;
+    List<CartModel> mListData;
     Context ctx;
-    public CartListAdapter(Context ctx, List<CategoryInfo> mListData) {
+    public CartListAdapter(Context ctx, List<CartModel> mListData) {
         this.mListData = mListData;
         this.ctx=ctx;
     }
@@ -48,9 +56,10 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.MyView
 
     @Override
     public void onBindViewHolder(CartListAdapter.MyViewHolder myViewHolder, int i) {
-        myViewHolder.title.setText(mListData.get(i).getPostTitle());
+        myViewHolder.title.setText(mListData.get(i).getCart_postName());
+        myViewHolder.itemQuantity.setText(mListData.get(i).getCart_quantity());
         Glide.with(ctx)
-                .load(mListData.get(i).getImagePath())
+                .load(mListData.get(i).getCart_imageUrl())
                 .into(myViewHolder.catImage);
     }
 
@@ -72,7 +81,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.MyView
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView catImage;
-        TextView title,weight;
+        TextView title,weight,itemQuantity,edit,removeItem;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -80,8 +89,67 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.MyView
             catImage = (ImageView) itemView.findViewById(R.id.catImageView);
             title= (TextView) itemView.findViewById(R.id.catTitle);
             weight= (TextView) itemView.findViewById(R.id.catWeightText);
+            itemQuantity= (TextView) itemView.findViewById(R.id.itemQuantity_text);
+            edit= (TextView) itemView.findViewById(R.id.itemEdit_text);
+            removeItem= (TextView) itemView.findViewById(R.id.cartItemRemove_btn);
+
+            removeItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showAlertPrompt(ctx,"Alert","Are you sure , you want to remove "+mListData.get(getAdapterPosition()).getCart_postName()+" from cart ?",
+                            getAdapterPosition(),mListData.get(getAdapterPosition()).getCartId());
+                }
+            });
+
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.showQuantityPrompt(ctx,mListData.get(getAdapterPosition()).getCart_postName(),getAdapterPosition(),"Please Enter quantity to order",1,
+                            mListData.get(getAdapterPosition()).getCart_quantity(),"CartScreen");
+                }
+            });
         }
     }
 
+
+    public static void showAlertPrompt(final Context context, String title, String message, final int position, final String cartId){
+
+        LayoutInflater inflater=LayoutInflater.from(context);
+        View prompt_view=inflater.inflate(R.layout.alert_prompt, null);
+       final Dialog dialog11=new Dialog(context);
+        dialog11.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog11.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog11.setContentView(prompt_view);
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        int width = metrics.widthPixels;
+        int height = metrics.heightPixels;
+
+        dialog11.getWindow().setLayout((6 * width)/9, LinearLayoutCompat.LayoutParams.WRAP_CONTENT);
+
+        final TextView title_txt= (TextView) prompt_view.findViewById(R.id.dialog_title_text);
+        //     title_txt.setTypeface(roboto_ligh);
+        title_txt.setText(title);
+        TextView message_txt= (TextView) prompt_view.findViewById(R.id.messageText);
+        message_txt.setText(message);
+
+        TextView okButton= (TextView) prompt_view.findViewById(R.id.OK_btn);
+        TextView cancelButton= (TextView) prompt_view.findViewById(R.id.cancel_btn);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((CartActivity)context).deleteItem(position,cartId);
+                dialog11.dismiss();
+            }
+        });
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog11.dismiss();
+            }
+        });
+
+        dialog11.show();
+
+    }
 
 }

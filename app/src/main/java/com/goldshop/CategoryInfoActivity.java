@@ -22,6 +22,7 @@ import com.goldshop.service.Response;
 import com.goldshop.service.ResponseListener;
 import com.goldshop.service.ServerRequest;
 import com.goldshop.utility.Connection;
+import com.goldshop.utility.Preference;
 import com.goldshop.utility.Utils;
 
 import org.json.JSONArray;
@@ -35,15 +36,18 @@ public class CategoryInfoActivity extends AppCompatActivity implements ResponseL
     List<CategoryInfo> list;
     CategoryInfoAdapter mAdapter;
     Handler h;
-    String catId,title;
+    String catId,title,cartId;
+    int listItemSelectedPosition=-1;
 
     DB_Handler db_handler;
+    Preference preference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_info);
         h = new Handler();
         db_handler=new DB_Handler(this);
+        preference=new Preference(this);
         Bundle bundle=getIntent().getExtras();
         if(bundle!=null){
             catId=bundle.getString("catId");
@@ -72,11 +76,18 @@ public class CategoryInfoActivity extends AppCompatActivity implements ResponseL
 
     }
 
-    public void productAddToCart(int position,String quantity){
+    public void productAddToCart(int position,String quantity,int addOrUpdate){
     //    Toast.makeText(this,"quantity-position"+quantity+"-"+position,Toast.LENGTH_LONG).show();
-        list.get(position).setProduct_quantity(Integer.parseInt(quantity));
-        db_handler.addDataToCart(list.get(position));
+       /* list.get(position).setProduct_quantity(Integer.parseInt(quantity));
+        db_handler.addDataToCart(list.get(position));*/
+        listItemSelectedPosition=position;
+        if(addOrUpdate==0){
+            addProductsToCart(list.get(position),quantity);
+        }else if(addOrUpdate==1){
+            updateCartProduct(list.get(position),quantity);
+        }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
@@ -98,6 +109,112 @@ public class CategoryInfoActivity extends AppCompatActivity implements ResponseL
     public void onSortClick(View view){
         Utils.showSortByPrompt(this,"SORT BY");
     }
+
+  /*CHECK CART PRODUCTS*/
+    public void checkCartProduct(int position){
+        listItemSelectedPosition=position;
+        if (Utils.ChechInternetAvalebleOrNot(CategoryInfoActivity.this)) {
+
+            Utils.showLoader(CategoryInfoActivity.this);
+            ServerRequest
+                    .postRequest(
+                            Connection.BASE_URL + "check_cartProducts",
+                            getCheckCartProductData(preference.getUSER_ID(),list.get(position).getCatID()),
+                            CategoryInfoActivity.this,
+                            ResponseListener.REQUEST_CHECK_CART_PRODUCTS);
+
+        } else {
+            //   Utils.shonterwSnakeBar(layout_view, "internet not connected !!!", Color.RED);Toast.makeText(LoginActivity.this,"Internet not connected !!!",Toast.LENGTH_LONG).show();
+            Toast.makeText(CategoryInfoActivity.this, "Internet not connected !!!", Toast.LENGTH_LONG).show();
+            return;
+        }
+    }
+    public JSONObject getCheckCartProductData(String userId,int postId) {
+        JSONObject json = new JSONObject();
+        try {
+
+            json.put("userId", userId);
+            json.put("postId", postId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return json;
+
+    }
+
+    /*UPDATE PRODUCTS QUANTITY*/
+    public void updateCartProduct(CategoryInfo model,String quantity){
+        if (Utils.ChechInternetAvalebleOrNot(CategoryInfoActivity.this)) {
+
+            Utils.showLoader(CategoryInfoActivity.this);
+            ServerRequest
+                    .postRequest(
+                            Connection.BASE_URL + "update_cartProducts",
+                            getUpdateCartProductData(preference.getUSER_ID(),model.getCatID(),quantity),
+                            CategoryInfoActivity.this,
+                            ResponseListener.REQUEST_UPDATE_CART_PRODUCTS);
+
+        } else {
+            //   Utils.shonterwSnakeBar(layout_view, "internet not connected !!!", Color.RED);Toast.makeText(LoginActivity.this,"Internet not connected !!!",Toast.LENGTH_LONG).show();
+            Toast.makeText(CategoryInfoActivity.this, "Internet not connected !!!", Toast.LENGTH_LONG).show();
+            return;
+        }
+    }
+    public JSONObject getUpdateCartProductData(String userId,int cartId,String qty) {
+        JSONObject json = new JSONObject();
+        try {
+
+            json.put("userId", userId);
+            json.put("cartId", cartId);
+            json.put("qty", qty);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return json;
+
+    }
+
+    /*ADD PRODUCTS TO CART*/
+    public void addProductsToCart(CategoryInfo model,String quantity){
+        if (Utils.ChechInternetAvalebleOrNot(CategoryInfoActivity.this)) {
+
+            Utils.showLoader(CategoryInfoActivity.this);
+            ServerRequest
+                    .postRequest(
+                            Connection.BASE_URL + "save_addToCart",
+                            getaddProductsToCartData(model,quantity),
+                            CategoryInfoActivity.this,
+                            ResponseListener.REQUEST_ADD_PRODUCT_TO_CART);
+
+        } else {
+            //   Utils.shonterwSnakeBar(layout_view, "internet not connected !!!", Color.RED);Toast.makeText(LoginActivity.this,"Internet not connected !!!",Toast.LENGTH_LONG).show();
+            Toast.makeText(CategoryInfoActivity.this, "Internet not connected !!!", Toast.LENGTH_LONG).show();
+            return;
+        }
+    }
+    public JSONObject getaddProductsToCartData(CategoryInfo model,String qty) {
+        JSONObject json = new JSONObject();
+        try {
+
+            json.put("postId", model.getCatID());
+            json.put("postName", model.getPostName());
+            json.put("postExcerpt", model.getPostExcerpt());
+            json.put("userId", preference.getUSER_ID());
+            json.put("quantity", qty);
+            json.put("postimagePath", model.getImagePath());
+            json.put("categoryID", catId);
+            json.put("term_taxonomy_Id", model.getTermTaxonomyID());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return json;
+
+    }
+
+
     public void getSelectedCategoryInfo() {
 
         if (Utils.ChechInternetAvalebleOrNot(CategoryInfoActivity.this)) {
@@ -184,6 +301,88 @@ public class CategoryInfoActivity extends AppCompatActivity implements ResponseL
                                 mAdapter.notifyDataSetChanged();
                             } else {
                                 Toast.makeText(CategoryInfoActivity.this, jsonObject1.getString("msg"), Toast.LENGTH_LONG).show();
+                            }
+
+                            Log.d("json_response", response.getData());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }else if (rid == ResponseListener.REQUEST_CHECK_CART_PRODUCTS) {
+
+                    if (response.isError()) {
+                        Toast.makeText(CategoryInfoActivity.this, response.getErrorMsg(),
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (response.getData() != null) {
+                        try {
+                            JSONObject jsonObject1 = new JSONObject(response.getData());
+                            JSONObject jsonObject = null;
+                            JSONArray jsonArray = null;
+                            String status = jsonObject1.getString("status");
+                            if (status.equalsIgnoreCase("true")) {
+                                jsonObject = jsonObject1.getJSONObject("record");
+                                if(jsonObject!=null) {
+                                    cartId = jsonObject.getString("cart_id");
+                                    Utils.showQuantityPrompt(CategoryInfoActivity.this, list.get(listItemSelectedPosition).getPostTitle(), listItemSelectedPosition, "Please Enter quantity to order", 1, jsonObject.getString("cart_quantity"),"CategoryInfo");
+                                }
+                            }
+                            else if(status.equalsIgnoreCase("false") && jsonObject1.getString("msg").equalsIgnoreCase("No Record found")){
+                                Utils.showQuantityPrompt(CategoryInfoActivity.this,list.get(listItemSelectedPosition).getPostTitle(),listItemSelectedPosition,"Please Enter quantity to order",0,"","CategoryInfo");
+                            }else{
+                                Toast.makeText(CategoryInfoActivity.this, jsonObject1.getString("msg"), Toast.LENGTH_LONG).show();
+                            }
+
+                            Log.d("json_response", response.getData());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }else if (rid == ResponseListener.REQUEST_ADD_PRODUCT_TO_CART) {
+
+                    if (response.isError()) {
+                        Toast.makeText(CategoryInfoActivity.this, response.getErrorMsg(),
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (response.getData() != null) {
+                        try {
+                            JSONObject jsonObject1 = new JSONObject(response.getData());
+                            JSONObject jsonObject = null;
+                            JSONArray jsonArray = null;
+                            String status = jsonObject1.getString("status");
+                            if (status.equalsIgnoreCase("true")) {
+                                Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Success",jsonObject1.getString("msg"));
+                            } else{
+                                Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Failed",jsonObject1.getString("msg"));
+                            }
+
+                            Log.d("json_response", response.getData());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }else if (rid == ResponseListener.REQUEST_UPDATE_CART_PRODUCTS) {
+
+                    if (response.isError()) {
+                        Toast.makeText(CategoryInfoActivity.this, response.getErrorMsg(),
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (response.getData() != null) {
+                        try {
+                            JSONObject jsonObject1 = new JSONObject(response.getData());
+                            JSONObject jsonObject = null;
+                            JSONArray jsonArray = null;
+                            String status = jsonObject1.getString("status");
+                            if (status.equalsIgnoreCase("true")) {
+                                Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Success",jsonObject1.getString("msg"));
+                            } else{
+                                Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Failed",jsonObject1.getString("msg"));
                             }
 
                             Log.d("json_response", response.getData());

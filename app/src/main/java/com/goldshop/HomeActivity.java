@@ -125,9 +125,9 @@ public class HomeActivity extends AppCompatActivity
            Intent intent=new Intent(HomeActivity.this,LoginActivity.class);
             startActivity(intent);
             finish();
-        }/*  else if (id == R.id.nav_send) {
-
-        }*/
+        }  else if (id == R.id.nav_about_us) {
+            startActivity(new Intent(HomeActivity.this,AboutUsActivity.class));
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

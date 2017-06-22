@@ -1,10 +1,12 @@
 package com.goldshop.model;
 
+import java.io.Serializable;
+
 /**
  * Created by bhanwar on 18/06/2017.
  */
 
-public class CategoryInfo {
+public class CategoryInfo implements Serializable{
     public int catID;
     public String postTitle;
     public String postDate;

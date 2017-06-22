@@ -12,6 +12,12 @@ public interface ResponseListener {
     public static final int REQUEST_CATEGORY_INFO=5;
     public static final int REQUEST_CHANGE_PASSWORD=6;
     public static final int REQUEST_SIGNUP_VERIFICATION=7;
+    public static final int REQUEST_CHECK_CART_PRODUCTS=8;
+    public static final int REQUEST_ADD_PRODUCT_TO_CART=9;
+    public static final int REQUEST_UPDATE_CART_PRODUCTS=10;
+    public static final int REQUEST_GET_CART_PRODUCTS_LIST=11;
+    public static final int REQUEST_REMOVE_ITEM_FROM_CART=12;
+    public static final int REQUEST_PLACE_ORDER=13;
 
     public void onResponse(Response response, int rid);
 }

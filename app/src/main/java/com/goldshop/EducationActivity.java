@@ -49,8 +49,9 @@ public class EducationActivity extends AppCompatActivity {
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        getSupportActionBar().setTitle("Education");
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Education");
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -66,7 +67,7 @@ public class EducationActivity extends AppCompatActivity {
         pagerAdapter=new EducationPagerAdapter(tabTitleList, getSupportFragmentManager());
         mViewPager.setAdapter(pagerAdapter);
         mPagerSlidingTabStrip.setTextColor(Color.parseColor("#FFFFFF"));
-        mPagerSlidingTabStrip.setDividerColor(getResources().getColor(R.color.blue));  /*#47aabf*/
+        mPagerSlidingTabStrip.setDividerColor(getResources().getColor(R.color.colorPrimary));  /*#47aabf*/
       /*  if(isTablet(ComplaintListActivity.this)==true){
 
             mPagerSlidingTabStrip.setTextSize(dpToPx(18));

@@ -55,7 +55,10 @@
           android:text="ADD TO BAG"
           android:background="@drawable/btn_bg"
           android:textSize="12sp"
-          android:padding="5dp"
+          android:paddingTop="5dp"
+          android:paddingBottom="5dp"
+          android:paddingLeft="10dp"
+          android:paddingRight="10dp"
           android:layout_marginLeft="10dp"
           android:layout_marginTop="10dp"
           />

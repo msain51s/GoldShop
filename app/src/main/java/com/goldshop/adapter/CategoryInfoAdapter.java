@@ -1,6 +1,7 @@
 package com.goldshop.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,12 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.goldshop.CategoryInfoActivity;
+import com.goldshop.ProductDetailActivity;
 import com.goldshop.R;
 import com.goldshop.model.CategoryInfo;
 import com.goldshop.model.GalleryModel;
 import com.goldshop.utility.Utils;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -32,7 +36,7 @@ public class CategoryInfoAdapter extends RecyclerView.Adapter<CategoryInfoAdapte
     }
 
     @Override
-    public CategoryInfoAdapter.MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public CategoryInfoAdapter.MyViewHolder onCreateViewHolder(ViewGroup viewGroup, final int i) {
         View view= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.category_info_list_item,
                     viewGroup, false);
 
@@ -41,9 +45,9 @@ public class CategoryInfoAdapter extends RecyclerView.Adapter<CategoryInfoAdapte
             @Override
             public void onClick(View v) {
                /* Uri gmmIntentUri = Uri.parse("google.navigation:q="+mListData.get(i).getLatitude()+","+mListData.get(i).getLongitude());
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                ctx.startActivity(mapIntent);*/
+              */  Intent intent = new Intent(ctx, ProductDetailActivity.class);
+                  intent.putExtra("model", mListData.get(i));
+                ctx.startActivity(intent);
             }
         });
         return new CategoryInfoAdapter.MyViewHolder(view);
@@ -88,7 +92,9 @@ public class CategoryInfoAdapter extends RecyclerView.Adapter<CategoryInfoAdapte
             addToBag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Utils.showQuantityPrompt(ctx,mListData.get(getAdapterPosition()).getPostTitle(),getAdapterPosition(),"Please Enter quantity to order");
+           //         Utils.showQuantityPrompt(ctx,mListData.get(getAdapterPosition()).getPostTitle(),getAdapterPosition(),"Please Enter quantity to order");
+
+                    ((CategoryInfoActivity)ctx).checkCartProduct(getAdapterPosition());
                 }
             });
         }
