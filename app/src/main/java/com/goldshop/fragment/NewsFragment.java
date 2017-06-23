@@ -51,16 +51,9 @@ public class NewsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        webView.getSettings().setBuiltInZoomControls(true);
-        webView.setInitialScale(1);
-        webView.getSettings().setAppCacheEnabled(false);
         webView.setWebViewClient(new myWebClient());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl("http://shridurgajewellers.com/view-news");
-
-       /* webView.setWebViewClient(new myWebClient());
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("http://shridurgajewellers.com/view-news");*/
     }
 
     public class myWebClient extends WebViewClient

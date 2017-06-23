@@ -50,16 +50,9 @@ public class ManagementFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        webView.getSettings().setBuiltInZoomControls(true);
-        webView.setInitialScale(1);
-        webView.getSettings().setAppCacheEnabled(false);
         webView.setWebViewClient(new myWebClient());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl("http://shridurgajewellers.com/view-management");
-
-      /*  webView.setWebViewClient(new myWebClient());
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("http://shridurgajewellers.com/view-management");*/
     }
 
     public class myWebClient extends WebViewClient

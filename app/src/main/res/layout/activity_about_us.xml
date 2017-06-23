@@ -34,7 +34,8 @@
             app:pstsUnderlineHeight="5dp"
             android:layout_below="@+id/toolbar"
             app:pstsIndicatorColor="#FFFFFF"
-            app:pstsShouldExpand="true" />
+            app:pstsShouldExpand="true"
+            app:tabGravity="fill"/>
 
     </android.support.design.widget.AppBarLayout>
 
