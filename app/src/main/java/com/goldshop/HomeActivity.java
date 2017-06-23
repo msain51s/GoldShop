@@ -19,6 +19,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.goldshop.utility.OnSwipeTouchListener;
 import com.goldshop.utility.Preference;
 
 public class HomeActivity extends AppCompatActivity
@@ -26,6 +27,7 @@ public class HomeActivity extends AppCompatActivity
     public FrameLayout frameLayout;
     ImageView logo;
     Preference preference;
+    View homeView;
 
     private float x1,x2;
     static final int MIN_DISTANCE = 150;
@@ -42,6 +44,20 @@ public class HomeActivity extends AppCompatActivity
 
     //    logo.startAnimation(animation);
         frameLayout= (FrameLayout) findViewById(R.id.contentFrame);
+        homeView=findViewById(R.id.home_view);
+        homeView.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeLeft() {
+               Intent intent=new Intent(HomeActivity.this,GalleryActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onSwipeRight() {
+                Intent intent=new Intent(HomeActivity.this,CartActivity.class);
+                startActivity(intent);
+            }
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -51,6 +67,7 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setItemIconTintList(null);
     }
 
     @Override
@@ -127,6 +144,8 @@ public class HomeActivity extends AppCompatActivity
             finish();
         }  else if (id == R.id.nav_about_us) {
             startActivity(new Intent(HomeActivity.this,AboutUsActivity.class));
+        }else if (id == R.id.nav_reach_us) {
+            startActivity(new Intent(HomeActivity.this,ReachUsActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

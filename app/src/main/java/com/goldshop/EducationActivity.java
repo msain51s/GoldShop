@@ -9,9 +9,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.goldshop.adapter.EducationPagerAdapter;
+import com.goldshop.fragment.CaratFragment;
+import com.goldshop.fragment.ClarityFragment;
+import com.goldshop.fragment.ColourFragment;
+import com.goldshop.fragment.CutFragment;
 import com.goldshop.fragment.ManagementFragment;
 import com.goldshop.fragment.NewsFragment;
 import com.goldshop.fragment.ProfileFragment;
@@ -40,9 +45,10 @@ public class EducationActivity extends AppCompatActivity {
         mViewPager = (ViewPager)findViewById(R.id.complaint_view_pager);
 
         tabTitleList =new ArrayList<>();
-        tabTitleList.add("PROFILE");
-        tabTitleList.add("MANAGEMENT");
-        tabTitleList.add("NEWS");
+        tabTitleList.add("CLARITY");
+        tabTitleList.add("COLOUR");
+        tabTitleList.add("CUT");
+        tabTitleList.add("CARAT");
         tabStripConfiguration();
     }
 
@@ -56,9 +62,10 @@ public class EducationActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new ProfileFragment(), "PROFILE");
-        adapter.addFrag(new ManagementFragment(), "MANAGEMENT");
-        adapter.addFrag(new NewsFragment(), "NEWS");
+        adapter.addFrag(new ClarityFragment(), "CLARITY");
+        adapter.addFrag(new ColourFragment(), "COLOUR");
+        adapter.addFrag(new CutFragment(), "CUT");
+        adapter.addFrag(new CaratFragment(), "CARAT");
 
         viewPager.setAdapter(adapter);
     }
@@ -149,5 +156,17 @@ public class EducationActivity extends AppCompatActivity {
             return mFragmentTitleList.get(position);
         }
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case android.R.id.home:
+                finish();
+                // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
+                break;
 
+        }
+
+        return true;
+    }
 }

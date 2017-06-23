@@ -18,6 +18,8 @@ public interface ResponseListener {
     public static final int REQUEST_GET_CART_PRODUCTS_LIST=11;
     public static final int REQUEST_REMOVE_ITEM_FROM_CART=12;
     public static final int REQUEST_PLACE_ORDER=13;
+    public static final int REQUEST_RESEND_OTP_FOR_SIGNUP_VERIFICATION=14;
+    public static final int REQUEST_RESEND_OTP_FOR_FORGOT_PASSWORD=15;
 
     public void onResponse(Response response, int rid);
 }

@@ -1,5 +1,7 @@
 package com.goldshop;
 
+import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import com.goldshop.service.Response;
 import com.goldshop.service.ResponseListener;
 import com.goldshop.service.ServerRequest;
 import com.goldshop.utility.Connection;
+import com.goldshop.utility.FontType;
 import com.goldshop.utility.Preference;
 import com.goldshop.utility.Utils;
 
@@ -29,15 +32,19 @@ public class ProductDetailActivity extends AppCompatActivity implements Response
     TextView productName,productExcerpt;
     CategoryInfo model;
     String cartId;
+    ImageView toolbarBasket;
 
     Handler h;
     Preference preference;
+    Typeface montserrat_light,montserrat_regular;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
         preference=new Preference(this);
         h=new Handler();
+        montserrat_light=Utils.getCustomFont(this, FontType.MONESTER_RAT_LIGHT);
+        montserrat_regular=Utils.getCustomFont(this, FontType.MONESTER_RAT_REGULAR);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -48,6 +55,9 @@ public class ProductDetailActivity extends AppCompatActivity implements Response
         productImage= (ImageView) findViewById(R.id.product_image);
         productName= (TextView) findViewById(R.id.product_name_text);
         productExcerpt= (TextView) findViewById(R.id.product_excerpt_text);
+        toolbarBasket= (ImageView) findViewById(R.id.toolbar_basket);
+        productExcerpt.setTypeface(montserrat_light);
+        productName.setTypeface(montserrat_regular);
 
         Bundle bundle=getIntent().getExtras();
         if(bundle!=null){
@@ -60,6 +70,14 @@ public class ProductDetailActivity extends AppCompatActivity implements Response
             productName.setText(model.getPostName());
             productExcerpt.setText(model.getPostExcerpt());
         }
+
+        toolbarBasket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(ProductDetailActivity.this,CartActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void clickAddToCart(View view){

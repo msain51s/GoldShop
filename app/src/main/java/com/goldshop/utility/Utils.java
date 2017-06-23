@@ -105,6 +105,14 @@ public class Utils {
             typeface= Typeface.createFromAsset(Application.mContext.getAssets(), "fonts/Roboto-Bold.ttf");
         else if(type==FontType.ROBOTO_REGULAR)
             typeface= Typeface.createFromAsset(Application.mContext.getAssets(), "fonts/Roboto-Regular.ttf");
+        else if(type==FontType.MONESTER_RAT_REGULAR)
+            typeface= Typeface.createFromAsset(Application.mContext.getAssets(), "fonts/Montserrat-Regular.otf");
+        else if(type==FontType.MONESTER_RAT_LIGHT)
+            typeface= Typeface.createFromAsset(Application.mContext.getAssets(), "fonts/Montserrat-Light.otf");
+        else if(type==FontType.MONESTER_RAT_BLACK)
+            typeface= Typeface.createFromAsset(Application.mContext.getAssets(), "fonts/Montserrat-Black.otf");
+        else if(type==FontType.MONESTER_RAT_BOLD)
+            typeface= Typeface.createFromAsset(Application.mContext.getAssets(), "fonts/Montserrat-Bold.otf");
 
         return typeface;
     }

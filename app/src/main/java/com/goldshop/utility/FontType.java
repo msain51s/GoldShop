@@ -11,4 +11,9 @@ public interface FontType {
     public final static int ROBOTO_CONDENSED=5;
     public final static int ROBOTO_BOLD=6;
     public final static int ROBOTO_REGULAR=7;
+
+    public final static int MONESTER_RAT_REGULAR=8;
+    public final static int MONESTER_RAT_BOLD=9;
+    public final static int MONESTER_RAT_LIGHT=10;
+    public final static int MONESTER_RAT_BLACK=11;
 }

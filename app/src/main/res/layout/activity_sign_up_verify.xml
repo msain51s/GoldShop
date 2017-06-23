@@ -15,8 +15,8 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:src="@drawable/forget_logo"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="30dp"

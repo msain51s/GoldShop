@@ -17,6 +17,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    allprojects {
+        repositories {
+            maven { url "https://jitpack.io" }
+        }
+    }
 }
 
 dependencies {
@@ -34,5 +40,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.github.delight-im:Android-AdvancedWebView:v3.0.0'
     testCompile 'junit:junit:4.12'
 }

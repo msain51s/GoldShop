@@ -1,6 +1,7 @@
 package com.goldshop;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.goldshop.adapter.GalleryListAdapter;
@@ -31,6 +34,7 @@ public class GalleryActivity extends AppCompatActivity implements ResponseListen
     List<GalleryModel> list;
     GalleryListAdapter mAdapter;
     Handler h;
+    ImageView toolbarBasket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,7 @@ public class GalleryActivity extends AppCompatActivity implements ResponseListen
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        toolbarBasket= (ImageView) findViewById(R.id.toolbar_basket);
         recyclerView = (RecyclerView) findViewById(R.id.gallery_recyclerview);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -56,6 +61,14 @@ public class GalleryActivity extends AppCompatActivity implements ResponseListen
         recyclerView.setAdapter(mAdapter);
 
         getAllCategories();
+
+        toolbarBasket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(GalleryActivity.this,CartActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

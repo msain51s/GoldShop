@@ -60,6 +60,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.MyView
         myViewHolder.itemQuantity.setText(mListData.get(i).getCart_quantity());
         Glide.with(ctx)
                 .load(mListData.get(i).getCart_imageUrl())
+                .placeholder(R.drawable.place_holder)
                 .into(myViewHolder.catImage);
     }
 

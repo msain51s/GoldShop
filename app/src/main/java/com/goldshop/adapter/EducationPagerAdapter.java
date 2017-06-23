@@ -3,6 +3,10 @@ package com.goldshop.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.goldshop.fragment.CaratFragment;
+import com.goldshop.fragment.ClarityFragment;
+import com.goldshop.fragment.ColourFragment;
+import com.goldshop.fragment.CutFragment;
 import com.goldshop.fragment.ManagementFragment;
 import com.goldshop.fragment.NewsFragment;
 import com.goldshop.fragment.ProfileFragment;
@@ -24,9 +28,10 @@ public class EducationPagerAdapter extends FragmentPagerAdapter {
 
         try {
             this.fragments = new ArrayList<Fragment>();
-            fragments.add(ProfileFragment.newInstance("", ""));
-            fragments.add(ManagementFragment.newInstance("", ""));
-            fragments.add(NewsFragment.newInstance("", ""));
+            fragments.add(ClarityFragment.newInstance("", ""));
+            fragments.add(ColourFragment.newInstance("", ""));
+            fragments.add(CutFragment.newInstance("", ""));
+            fragments.add(CaratFragment.newInstance("", ""));
 
         } catch (ArrayIndexOutOfBoundsException e) {
             // TODO Auto-generated catch block

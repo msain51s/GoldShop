@@ -2,6 +2,7 @@ package com.goldshop.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,8 @@ import com.goldshop.CategoryInfoActivity;
 import com.goldshop.GalleryActivity;
 import com.goldshop.R;
 import com.goldshop.model.GalleryModel;
+import com.goldshop.utility.FontType;
+import com.goldshop.utility.Utils;
 
 import java.util.List;
 
@@ -29,9 +32,11 @@ public class GalleryListAdapter extends RecyclerView.Adapter<GalleryListAdapter.
 
     List<GalleryModel> mListData;
     GalleryActivity ctx;
+    Typeface montserrat_regular;
     public GalleryListAdapter(GalleryActivity ctx, List<GalleryModel> mListData) {
         this.mListData = mListData;
         this.ctx=ctx;
+        montserrat_regular= Utils.getCustomFont(ctx, FontType.MONESTER_RAT_REGULAR);
     }
 
     @Override
@@ -63,6 +68,12 @@ public class GalleryListAdapter extends RecyclerView.Adapter<GalleryListAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder myViewHolder, int i) {
         myViewHolder.title.setText(mListData.get(i).getName());
+        if(i==0)
+            myViewHolder.imageView.setImageResource(R.drawable.category_banner_01);
+        else if(i==1)
+            myViewHolder.imageView.setImageResource(R.drawable.category_banner_02);
+        else if(i==2)
+            myViewHolder.imageView.setImageResource(R.drawable.category_banner_03);
     }
 
     public void removeItem(int position) {
@@ -82,7 +93,7 @@ public class GalleryListAdapter extends RecyclerView.Adapter<GalleryListAdapter.
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView title;
+        TextView title,itemCount;
         ImageView imageView;
 
         public MyViewHolder(View itemView) {
@@ -90,6 +101,10 @@ public class GalleryListAdapter extends RecyclerView.Adapter<GalleryListAdapter.
 
             title = (TextView) itemView.findViewById(R.id.imageNameText);
             imageView= (ImageView) itemView.findViewById(R.id.image_view);
+            itemCount= (TextView) itemView.findViewById(R.id.noOfItemText);
+
+            title.setTypeface(montserrat_regular);
+            itemCount.setTypeface(montserrat_regular);
 
             DisplayMetrics metrics = ctx.getResources().getDisplayMetrics();
          //   int width = metrics.widthPixels;

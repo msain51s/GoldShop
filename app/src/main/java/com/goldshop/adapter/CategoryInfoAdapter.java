@@ -58,6 +58,7 @@ public class CategoryInfoAdapter extends RecyclerView.Adapter<CategoryInfoAdapte
         myViewHolder.title.setText(mListData.get(i).getPostTitle());
         Glide.with(ctx)
                 .load(mListData.get(i).getImagePath())
+                .placeholder(R.drawable.place_holder)
                 .into(myViewHolder.catImage);
     }
 

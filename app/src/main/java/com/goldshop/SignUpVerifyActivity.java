@@ -46,7 +46,7 @@ public class SignUpVerifyActivity extends AppCompatActivity implements ResponseL
     }
 
     public void clickResendOTP(View view){
-        // pending
+        resendOtp(emailValue);
     }
 
     public void attemptVerifySignUp(){
@@ -94,6 +94,34 @@ public class SignUpVerifyActivity extends AppCompatActivity implements ResponseL
 
     }
 
+
+    public void resendOtp(String emailValue){
+        if (Utils.ChechInternetAvalebleOrNot(SignUpVerifyActivity.this)) {
+
+            Utils.showLoader(SignUpVerifyActivity.this);
+            ServerRequest
+                    .postRequest(
+                            Connection.BASE_URL + "resendOTP",
+                            getResendOTPData(emailValue),
+                            SignUpVerifyActivity.this,
+                            ResponseListener.REQUEST_RESEND_OTP_FOR_SIGNUP_VERIFICATION);
+
+        } else {
+            //   Utils.showSnakeBar(layout_view, "internet not connected !!!", Color.RED);Toast.makeText(LoginActivity.this,"Internet not connected !!!",Toast.LENGTH_LONG).show();
+            return;
+        }
+    }
+
+    public JSONObject getResendOTPData(String emailValue) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("email", emailValue);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return json;
+
+    }
     @Override
     public void onResponse(final Response response, final int rid) {
 
@@ -116,6 +144,29 @@ public class SignUpVerifyActivity extends AppCompatActivity implements ResponseL
                             String status=jsonObject.getString("status");
 
                  //           Toast.makeText(SignUpVerifyActivity.this,jsonObject.getString("msg"),Toast.LENGTH_LONG).show();
+                            if(status.equalsIgnoreCase("true"))
+                                Utils.showCommonInfoPrompt(SignUpVerifyActivity.this,"Success",jsonObject.getString("msg"));
+                            else
+                                Utils.showCommonInfoPrompt(SignUpVerifyActivity.this,"Failed",jsonObject.getString("msg"));
+                            Log.d("json_response", response.getData());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }else if (rid == ResponseListener.REQUEST_RESEND_OTP_FOR_SIGNUP_VERIFICATION) {
+
+                    if (response.isError()) {
+                        Toast.makeText(SignUpVerifyActivity.this, response.getErrorMsg(),
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (response.getData() != null) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.getData());
+                            String status=jsonObject.getString("status");
+
+                            //           Toast.makeText(SignUpVerifyActivity.this,jsonObject.getString("msg"),Toast.LENGTH_LONG).show();
                             if(status.equalsIgnoreCase("true"))
                                 Utils.showCommonInfoPrompt(SignUpVerifyActivity.this,"Success",jsonObject.getString("msg"));
                             else

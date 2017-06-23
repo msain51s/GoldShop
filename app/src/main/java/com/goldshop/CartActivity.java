@@ -50,7 +50,7 @@ public class CartActivity extends AppCompatActivity implements ResponseListener{
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("CART");
+        getSupportActionBar().setTitle("Basket");
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -265,13 +265,11 @@ public class CartActivity extends AppCompatActivity implements ResponseListener{
                             JSONObject jsonObject1 = new JSONObject(response.getData());
                             JSONObject jsonObject = null;
                             JSONArray jsonArray = null;
+                            list.clear();
+                            CartModel model = null;
                             String status = jsonObject1.getString("status");
                             if (status.equalsIgnoreCase("true")) {
                                 jsonArray = jsonObject1.getJSONArray("record");
-                            }
-                            CartModel model = null;
-                            list.clear();
-
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
 
@@ -289,10 +287,11 @@ public class CartActivity extends AppCompatActivity implements ResponseListener{
                                 }
 
                                 mAdapter.notifyDataSetChanged();
-                                itemCountText.setText(list.size()+" item in your bag");
-
+                                itemCountText.setText(list.size() + " item in your bag");
+                            }
                             } else {
-                                Toast.makeText(CartActivity.this, jsonObject1.getString("msg"), Toast.LENGTH_LONG).show();
+                                Utils.showCommonInfoPrompt(CartActivity.this,"Alert",jsonObject1.getString("msg"));
+                //                Toast.makeText(CartActivity.this, jsonObject1.getString("msg"), Toast.LENGTH_LONG).show();
                             }
 
                             Log.d("json_response", response.getData());

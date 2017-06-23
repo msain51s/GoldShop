@@ -17,9 +17,9 @@
         android:padding="10dp">
    <ImageView
        android:id="@+id/catImageView"
-       android:layout_width="80dp"
-       android:layout_height="80dp"
-       android:src="@drawable/forget_logo"
+       android:layout_width="match_parent"
+       android:layout_height="100dp"
+       android:src="@drawable/place_holder"
        android:layout_gravity="center_horizontal"/>
    <TextView
        android:id="@+id/catTitle"
@@ -44,7 +44,7 @@
           android:layout_height="wrap_content"
           android:textColor="@color/light_blue"
           android:text="250 gms"
-          android:textSize="14sp"
+          android:textSize="13sp"
           android:layout_marginTop="10dp"
           />
       <TextView
@@ -54,7 +54,7 @@
           android:textColor="@color/white"
           android:text="ADD TO BAG"
           android:background="@drawable/btn_bg"
-          android:textSize="12sp"
+          android:textSize="10sp"
           android:paddingTop="5dp"
           android:paddingBottom="5dp"
           android:paddingLeft="10dp"

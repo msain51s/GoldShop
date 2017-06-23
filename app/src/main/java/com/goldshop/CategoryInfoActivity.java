@@ -1,6 +1,7 @@
 package com.goldshop;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.goldshop.adapter.CategoryInfoAdapter;
@@ -38,6 +40,7 @@ public class CategoryInfoActivity extends AppCompatActivity implements ResponseL
     Handler h;
     String catId,title,cartId;
     int listItemSelectedPosition=-1;
+    ImageView toolbarBasket;
 
     DB_Handler db_handler;
     Preference preference;
@@ -60,6 +63,7 @@ public class CategoryInfoActivity extends AppCompatActivity implements ResponseL
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        toolbarBasket= (ImageView) findViewById(R.id.toolbar_basket);
         recyclerView = (RecyclerView) findViewById(R.id.categoryInfo_recyclerview);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
@@ -74,6 +78,13 @@ public class CategoryInfoActivity extends AppCompatActivity implements ResponseL
 
         getSelectedCategoryInfo();
 
+        toolbarBasket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(CategoryInfoActivity.this,CartActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void productAddToCart(int position,String quantity,int addOrUpdate){
@@ -109,6 +120,9 @@ public class CategoryInfoActivity extends AppCompatActivity implements ResponseL
     public void onSortClick(View view){
         Utils.showSortByPrompt(this,"SORT BY");
     }
+
+  /*SUB CATEGORY CLICK*/
+    public void onSubCategoryClick(View view){}
 
   /*CHECK CART PRODUCTS*/
     public void checkCartProduct(int position){

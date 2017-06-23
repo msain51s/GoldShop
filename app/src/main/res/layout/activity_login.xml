@@ -51,7 +51,7 @@
         android:layout_marginBottom="20dp"
         android:padding="10dp"
         android:gravity="center"
-        android:text="Sign Up"
+        android:text="Login"
         android:elevation="4dp"
         android:textColor="@color/white"
         android:textAllCaps="false"

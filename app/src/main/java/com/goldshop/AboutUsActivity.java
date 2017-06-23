@@ -8,8 +8,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.goldshop.adapter.AboutUsPagerAdapter;
 import com.goldshop.adapter.EducationPagerAdapter;
 import com.goldshop.fragment.ManagementFragment;
 import com.goldshop.fragment.NewsFragment;
@@ -22,7 +24,7 @@ public class AboutUsActivity extends AppCompatActivity {
 
     private PagerSlidingTabStrip mPagerSlidingTabStrip;
     private ViewPager mViewPager;
-    private EducationPagerAdapter pagerAdapter;
+    private AboutUsPagerAdapter pagerAdapter;
     ArrayList<String> tabTitleList=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +62,11 @@ public class AboutUsActivity extends AppCompatActivity {
         adapter.addFrag(new NewsFragment(), "NEWS");
 
         viewPager.setAdapter(adapter);
+
     }
     public void tabStripConfiguration(){
 
-        pagerAdapter=new EducationPagerAdapter(tabTitleList, getSupportFragmentManager());
+        pagerAdapter=new AboutUsPagerAdapter(tabTitleList, getSupportFragmentManager());
         mViewPager.setAdapter(pagerAdapter);
         mPagerSlidingTabStrip.setTextColor(Color.parseColor("#FFFFFF"));
         mPagerSlidingTabStrip.setDividerColor(getResources().getColor(R.color.colorPrimary));  /*#47aabf*/
@@ -148,6 +151,18 @@ public class AboutUsActivity extends AppCompatActivity {
             return mFragmentTitleList.get(position);
         }
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case android.R.id.home:
+                finish();
+                // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
+                break;
 
+        }
+
+        return true;
+    }
 }
 
