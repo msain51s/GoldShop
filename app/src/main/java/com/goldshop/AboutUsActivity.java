@@ -16,6 +16,7 @@ import com.goldshop.adapter.EducationPagerAdapter;
 import com.goldshop.fragment.ManagementFragment;
 import com.goldshop.fragment.NewsFragment;
 import com.goldshop.fragment.ProfileFragment;
+import com.goldshop.utility.FragmentLifecycle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,11 +90,11 @@ public class AboutUsActivity extends AppCompatActivity {
             public void onPageSelected(int tabPosition) {
                 // on changing the page
                 // make respected tab selected
-         /*       FragmentLifecycle fragmentToShow = (FragmentLifecycle) pagerAdapter.getItem(tabPosition);
+                FragmentLifecycle fragmentToShow = (FragmentLifecycle) pagerAdapter.getItem(tabPosition);
                 if (tabPosition == 0)
-                    fragmentToShow.onResumeFragment(openIssueList, false);
+                    fragmentToShow.onResumeFragment();
                 else
-                    fragmentToShow.onResumeFragment(resolvedIssueList, false);*/
+                    fragmentToShow.onResumeFragment();
 
                 System.out.println("tab position" + tabPosition);
 //                FragmentLifecycle fragmentToPause = (FragmentLifecycle) pagerAdapter.getItem(position);

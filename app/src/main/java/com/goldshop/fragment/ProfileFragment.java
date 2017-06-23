@@ -13,6 +13,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.goldshop.R;
+import com.goldshop.utility.FragmentLifecycle;
 import com.goldshop.utility.MyWebView;
 import com.goldshop.utility.Utils;
 
@@ -20,10 +21,11 @@ import com.goldshop.utility.Utils;
  * Created by bhanwar on 15/06/2017.
  */
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements FragmentLifecycle{
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private FragmentActivity myContext;
+    MyWebView webView;
 
     public static ProfileFragment newInstance(String param1, String param2) {
         ProfileFragment fragment = new ProfileFragment();
@@ -43,19 +45,29 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_profile_fragment, container, false);
-        WebView webView= (WebView) view.findViewById(R.id.profile_fragment_webview);
-
-        /*webView.setWebViewClient(new myWebClient());
-        webView.getSettings().setBuiltInZoomControls(true);
-        webView.setInitialScale(1);
-        webView.getSettings().setAppCacheEnabled(false);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("http://shridurgajewellers.com/view-profile");*/
+        webView= (MyWebView) view.findViewById(R.id.profile_fragment_webview);
 
         webView.setWebViewClient(new myWebClient());
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("www.google.com"/*"http://shridurgajewellers.com/view-profile"*/);
+        webView.loadUrl("http://shridurgajewellers.com/view-profile");
         return view;
+    }
+
+    @Override
+    public void onPauseFragment() {
+
+    }
+
+    @Override
+    public void onResumeFragment() {
+        webView.setWebViewClient(new myWebClient());
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadUrl("http://shridurgajewellers.com/view-profile");
+    }
+
+    @Override
+    public void displayComplaintAssignLayout(boolean status) {
+
     }
 
     public class myWebClient extends WebViewClient
@@ -69,7 +81,7 @@ public class ProfileFragment extends Fragment {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             // TODO Auto-generated method stub
-            Utils.showLoader(getActivity());
+    //        Utils.showLoader(getActivity());
             view.loadUrl(url);
             return true;
 
@@ -80,7 +92,7 @@ public class ProfileFragment extends Fragment {
             // TODO Auto-generated method stub
             super.onPageFinished(view, url);
 
-            Utils.dismissLoader();
+     //       Utils.dismissLoader();
         }
     }
 }
