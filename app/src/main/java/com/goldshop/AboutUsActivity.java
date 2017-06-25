@@ -40,12 +40,14 @@ public class AboutUsActivity extends AppCompatActivity {
     private void setupViewPager() {
         mPagerSlidingTabStrip = (PagerSlidingTabStrip)findViewById(R.id.complaint_sliding_tab);
         mViewPager = (ViewPager)findViewById(R.id.complaint_view_pager);
+        mViewPager.setOffscreenPageLimit(1);
 
         tabTitleList =new ArrayList<>();
         tabTitleList.add("PROFILE");
         tabTitleList.add("MANAGEMENT");
         tabTitleList.add("NEWS");
         tabStripConfiguration();
+    //    setupViewPager(mViewPager);
     }
 
     private void setupToolbar() {
@@ -57,7 +59,7 @@ public class AboutUsActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        EducationActivity.ViewPagerAdapter adapter = new EducationActivity.ViewPagerAdapter(getSupportFragmentManager());
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new ProfileFragment(), "PROFILE");
         adapter.addFrag(new ManagementFragment(), "MANAGEMENT");
         adapter.addFrag(new NewsFragment(), "NEWS");

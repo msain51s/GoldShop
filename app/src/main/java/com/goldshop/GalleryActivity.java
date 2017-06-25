@@ -28,7 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GalleryActivity extends AppCompatActivity implements ResponseListener{
+public class GalleryActivity extends BaseActivity implements ResponseListener{
 
     RecyclerView recyclerView;
     List<GalleryModel> list;
@@ -39,16 +39,16 @@ public class GalleryActivity extends AppCompatActivity implements ResponseListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //      getLayoutInflater().inflate(R.layout.activity_gallery,frameLayout);
-        setContentView(R.layout.activity_gallery);
+              getLayoutInflater().inflate(R.layout.activity_gallery,frameLayout);
+ //       setContentView(R.layout.activity_gallery);
         h=new Handler();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+       /* Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Gallery");
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        toolbarBasket= (ImageView) findViewById(R.id.toolbar_basket);
+        toolbarBasket= (ImageView) findViewById(R.id.toolbar_basket);*/
         recyclerView = (RecyclerView) findViewById(R.id.gallery_recyclerview);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -62,13 +62,13 @@ public class GalleryActivity extends AppCompatActivity implements ResponseListen
 
         getAllCategories();
 
-        toolbarBasket.setOnClickListener(new View.OnClickListener() {
+       /* toolbarBasket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(GalleryActivity.this,CartActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
     }
 
     @Override

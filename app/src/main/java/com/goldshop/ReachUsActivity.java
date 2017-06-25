@@ -31,7 +31,7 @@ public class ReachUsActivity extends AppCompatActivity {
 
         webView.setWebViewClient(new myWebClient());
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("http://shridurgajewellers.com/contact-mobi");
+        webView.loadUrl("http://shridurgajewellers.com/contact-mobi/");
     }
 
     public class myWebClient extends WebViewClient

@@ -71,6 +71,6 @@ public class AboutUsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getItemPosition(Object object) {
-        return POSITION_NONE;
+        return super.getItemPosition(object);
     }
 }

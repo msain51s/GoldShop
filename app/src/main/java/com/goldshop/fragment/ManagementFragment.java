@@ -13,13 +13,14 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.goldshop.R;
+import com.goldshop.utility.FragmentLifecycle;
 import com.goldshop.utility.Utils;
 
 /**
  * Created by bhanwar on 15/06/2017.
  */
 
-public class ManagementFragment extends Fragment {
+public class ManagementFragment extends Fragment implements FragmentLifecycle{
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     WebView webView;
@@ -28,8 +29,8 @@ public class ManagementFragment extends Fragment {
         super.onAttach(context);
     }
 
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
+    public static ManagementFragment newInstance(String param1, String param2) {
+        ManagementFragment fragment = new ManagementFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -50,9 +51,23 @@ public class ManagementFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+    }
+
+    @Override
+    public void onPauseFragment() {
+
+    }
+
+    @Override
+    public void onResumeFragment() {
         webView.setWebViewClient(new myWebClient());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl("http://shridurgajewellers.com/view-management");
+    }
+
+    @Override
+    public void displayComplaintAssignLayout(boolean status) {
+
     }
 
     public class myWebClient extends WebViewClient

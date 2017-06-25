@@ -2,6 +2,7 @@ package com.goldshop.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,8 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.goldshop.R;
+import com.goldshop.utility.FragmentLifecycle;
+import com.goldshop.utility.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,7 +24,7 @@ import com.goldshop.R;
  * Use the {@link ClarityFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ClarityFragment extends Fragment {
+public class ClarityFragment extends Fragment implements FragmentLifecycle{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -70,6 +74,10 @@ public class ClarityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_clarity, container, false);
         webView= (WebView) view.findViewById(R.id.clarity_fragment_webview);
 
+        webView.setWebViewClient(new myWebClient());
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadUrl("http://shridurgajewellers.com/clarity/");
+
         return view;
     }
 
@@ -86,6 +94,23 @@ public class ClarityFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onPauseFragment() {
+
+    }
+
+    @Override
+    public void onResumeFragment() {
+        webView.setWebViewClient(new myWebClient());
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadUrl("http://shridurgajewellers.com/clarity/");
+    }
+
+    @Override
+    public void displayComplaintAssignLayout(boolean status) {
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -99,5 +124,32 @@ public class ClarityFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public class myWebClient extends WebViewClient
+    {
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            // TODO Auto-generated method stub
+            super.onPageStarted(view, url, favicon);
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            // TODO Auto-generated method stub
+            Utils.showLoader(getActivity());
+            view.loadUrl(url);
+            return true;
+
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            // TODO Auto-generated method stub
+            super.onPageFinished(view, url);
+
+            Utils.dismissLoader();
+        }
+
     }
 }
