@@ -1,6 +1,7 @@
 package com.goldshop;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -10,17 +11,23 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.goldshop.utility.OnSwipeTouchListener;
+import com.goldshop.utility.FontType;
 import com.goldshop.utility.Preference;
+import com.goldshop.utility.Utils;
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public FrameLayout frameLayout;
 Preference preference;
+    Toolbar toolbar;
+    ImageView toolbarCart;
+    TextView toolbarTitle,cart_countText;
+    View cartIconView;
+    Typeface montesarrat_bold;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,12 +38,17 @@ Preference preference;
         super.setContentView(fullView);*/
 
         preference=new Preference(this);
+        montesarrat_bold= Utils.getCustomFont(this, FontType.MONESTER_RAT_BOLD);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setVisibility(View.GONE);
+        toolbarCart = (ImageView) findViewById(R.id.toolbar_cart_icon);
+        toolbarTitle= (TextView) findViewById(R.id.toolbar_title_text);
+        toolbarTitle.setTypeface(montesarrat_bold);
 
 
+        cart_countText= (TextView) findViewById(R.id.cart_countText);
+        cartIconView=findViewById(R.id.cartLayout);
         frameLayout= (FrameLayout) findViewById(R.id.content_frame);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -47,6 +59,14 @@ Preference preference;
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
+
+        cartIconView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(BaseActivity.this,CartActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -74,11 +94,6 @@ Preference preference;
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -93,7 +108,7 @@ Preference preference;
         } else if (id == R.id.nav_gallery) {
             startActivity(new Intent(BaseActivity.this,GalleryActivity.class));
         } else if (id == R.id.nav_education) {
-            startActivity(new Intent(BaseActivity.this,EducationActivity.class));
+            startActivity(new Intent(BaseActivity.this,EventActivity.class));
         } else if (id == R.id.nav_basket) {
             startActivity(new Intent(BaseActivity.this,CartActivity.class));
         }else if (id == R.id.nav_logout) {

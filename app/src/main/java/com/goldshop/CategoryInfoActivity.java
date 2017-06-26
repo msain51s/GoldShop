@@ -33,7 +33,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryInfoActivity extends AppCompatActivity implements ResponseListener{
+public class CategoryInfoActivity extends BaseActivity implements ResponseListener{
     RecyclerView recyclerView;
     List<CategoryInfo> list;
     CategoryInfoAdapter mAdapter;
@@ -47,7 +47,8 @@ public class CategoryInfoActivity extends AppCompatActivity implements ResponseL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category_info);
+//        setContentView(R.layout.activity_category_info);
+        getLayoutInflater().inflate(R.layout.activity_category_info,frameLayout);
         h = new Handler();
         db_handler=new DB_Handler(this);
         preference=new Preference(this);
@@ -57,13 +58,15 @@ public class CategoryInfoActivity extends AppCompatActivity implements ResponseL
             title=bundle.getString("title");
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+        toolbarTitle.setText(title);
+        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
-        toolbarBasket= (ImageView) findViewById(R.id.toolbar_basket);
+        toolbarBasket= (ImageView) findViewById(R.id.toolbar_cart_icon);
         recyclerView = (RecyclerView) findViewById(R.id.categoryInfo_recyclerview);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);

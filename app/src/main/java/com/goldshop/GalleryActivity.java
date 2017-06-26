@@ -42,13 +42,9 @@ public class GalleryActivity extends BaseActivity implements ResponseListener{
               getLayoutInflater().inflate(R.layout.activity_gallery,frameLayout);
  //       setContentView(R.layout.activity_gallery);
         h=new Handler();
-       /* Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Gallery");
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setVisibility(View.VISIBLE);
+        toolbarTitle.setText("Gallery");
 
-        toolbarBasket= (ImageView) findViewById(R.id.toolbar_basket);*/
         recyclerView = (RecyclerView) findViewById(R.id.gallery_recyclerview);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -61,14 +57,6 @@ public class GalleryActivity extends BaseActivity implements ResponseListener{
         recyclerView.setAdapter(mAdapter);
 
         getAllCategories();
-
-       /* toolbarBasket.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(GalleryActivity.this,CartActivity.class);
-                startActivity(intent);
-            }
-        });*/
     }
 
     @Override
@@ -152,6 +140,7 @@ public class GalleryActivity extends BaseActivity implements ResponseListener{
                                     model = new GalleryModel();
                                     model.setTermId(jsonObject.getString("term_id"));
                                     model.setName(jsonObject.getString("name"));
+                                    model.setProductCount(jsonObject.getString("product_count"));
 
                                     list.add(model);
                                 }

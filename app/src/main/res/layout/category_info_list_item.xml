@@ -46,13 +46,14 @@
           android:text="250 gms"
           android:textSize="13sp"
           android:layout_marginTop="10dp"
+          android:visibility="gone"
           />
       <TextView
           android:id="@+id/addToBagButton"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:textColor="@color/white"
-          android:text="ADD TO BAG"
+          android:text="ADD TO CART"
           android:background="@drawable/btn_bg"
           android:textSize="10sp"
           android:paddingTop="5dp"

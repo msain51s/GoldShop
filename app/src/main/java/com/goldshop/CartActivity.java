@@ -31,7 +31,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartActivity extends AppCompatActivity implements ResponseListener{
+public class CartActivity extends BaseActivity implements ResponseListener{
     RecyclerView recyclerView;
     TextView itemCountText;
     List<CartModel> list;
@@ -43,16 +43,19 @@ public class CartActivity extends AppCompatActivity implements ResponseListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cart);
+    //    setContentView(R.layout.activity_cart);
+        getLayoutInflater().inflate(R.layout.activity_cart,frameLayout);
         h = new Handler();
         db_handler=new DB_Handler(this);
         preference=new Preference(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+        toolbarTitle.setText("Cart");
+        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Basket");
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
         itemCountText= (TextView) findViewById(R.id.itemCountTextView);
         recyclerView = (RecyclerView) findViewById(R.id.cart_recyclerview);

@@ -21,6 +21,16 @@ public class GalleryModel {
     public String slug;
     public String taxonomy;
 
+    public String getProductCount() {
+        return productCount;
+    }
+
+    public void setProductCount(String productCount) {
+        this.productCount = productCount;
+    }
+
+    public String productCount;
+
     public String getSlug() {
         return slug;
     }

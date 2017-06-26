@@ -15,7 +15,7 @@
         <item
             android:id="@+id/nav_basket"
             android:icon="@drawable/basket_menu_icon"
-            android:title="Basket" />
+            android:title="Cart" />
         <item
             android:id="@+id/nav_about_us"
             android:icon="@drawable/about_us_menu_icon"
@@ -27,7 +27,7 @@
         <item
             android:id="@+id/nav_education"
             android:icon="@drawable/education_menu_icon"
-            android:title="Education" />
+            android:title="Event" />
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/logout_menu_icon"

@@ -3,6 +3,8 @@ package com.goldshop;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Handler;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.goldshop.adapter.ViewPagerAdapter;
 import com.goldshop.model.CategoryInfo;
 import com.goldshop.service.Response;
 import com.goldshop.service.ResponseListener;
@@ -22,17 +25,24 @@ import com.goldshop.utility.Connection;
 import com.goldshop.utility.FontType;
 import com.goldshop.utility.Preference;
 import com.goldshop.utility.Utils;
+import com.viewpagerindicator.CirclePageIndicator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class ProductDetailActivity extends AppCompatActivity implements ResponseListener{
+import java.util.ArrayList;
+
+public class ProductDetailActivity extends BaseActivity implements ResponseListener{
 
     ImageView productImage;
     TextView productName,productExcerpt;
     CategoryInfo model;
     String cartId;
     ImageView toolbarBasket;
+    ViewPager viewPager;
+    PagerAdapter adapter;
+    CirclePageIndicator mIndicator;
+    ArrayList<String> imageUrlList;
 
     Handler h;
     Preference preference;
@@ -40,34 +50,39 @@ public class ProductDetailActivity extends AppCompatActivity implements Response
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_detail);
+ //       setContentView(R.layout.activity_product_detail);
+        getLayoutInflater().inflate(R.layout.activity_product_detail,frameLayout);
         preference=new Preference(this);
         h=new Handler();
+        imageUrlList=new ArrayList<>();
         montserrat_light=Utils.getCustomFont(this, FontType.MONESTER_RAT_LIGHT);
         montserrat_regular=Utils.getCustomFont(this, FontType.MONESTER_RAT_REGULAR);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+        toolbarTitle.setText("Product Detail");
+       /* Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Product Detail");
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
         productImage= (ImageView) findViewById(R.id.product_image);
         productName= (TextView) findViewById(R.id.product_name_text);
         productExcerpt= (TextView) findViewById(R.id.product_excerpt_text);
-        toolbarBasket= (ImageView) findViewById(R.id.toolbar_basket);
+        toolbarBasket= (ImageView) findViewById(R.id.toolbar_cart_icon);
         productExcerpt.setTypeface(montserrat_light);
         productName.setTypeface(montserrat_regular);
 
         Bundle bundle=getIntent().getExtras();
         if(bundle!=null){
             model= (CategoryInfo) bundle.get("model");
+            imageUrlList.add(model.getImagePath());
 
-            Glide.with(this)
+           /* Glide.with(this)
                     .load(model.getImagePath())
-                    .into(productImage);
+                    .into(productImage);*/
 
-            productName.setText(model.getPostName());
+            productName.setText(model.getPostTitle());
             productExcerpt.setText(model.getPostExcerpt());
         }
 
@@ -78,6 +93,18 @@ public class ProductDetailActivity extends AppCompatActivity implements Response
                 startActivity(intent);
             }
         });
+
+        // Locate the ViewPager in viewpager_main.xml
+        viewPager = (ViewPager) findViewById(R.id.product_detail_image_viewPager);
+        // Pass results to ViewPagerAdapter Class
+        adapter = new ViewPagerAdapter(this, imageUrlList);
+        // Binds the Adapter to the ViewPager
+        viewPager.setAdapter(adapter);
+
+        // ViewPager Indicator
+        mIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
+
+        mIndicator.setViewPager(viewPager);
     }
 
     public void clickAddToCart(View view){

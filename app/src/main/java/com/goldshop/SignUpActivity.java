@@ -51,6 +51,8 @@ public class SignUpActivity extends AppCompatActivity implements ResponseListene
         finish();
     }
     public void attemptSignUp(){
+        String emailPattern="[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
         String firstNameValue=firstName.getText().toString();
         String lastNameValue=lastName.getText().toString();
         String companyNameValue=companyName.getText().toString();
@@ -79,11 +81,15 @@ public class SignUpActivity extends AppCompatActivity implements ResponseListene
             contactNo.setError("This field is required !!!");
             focusView=contactNo;
             cancel=true;
+        }else if(contactNoValue.length()!=10){
+            contactNo.setError("Contact no should be in 10 digit !!!");
+            focusView=contactNo;
+            cancel=true;
         }else if(TextUtils.isEmpty(emailValue)){
             email.setError("This field is required !!!");
             focusView=email;
             cancel=true;
-        }else if(TextUtils.isEmpty(emailValue)){
+        }else if(!emailValue.matches(emailPattern)){
             email.setError("Enter valid email address !!!");
             focusView=email;
             cancel=true;

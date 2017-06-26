@@ -14,37 +14,44 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.goldshop.utility.OnSwipeTouchListener;
 import com.goldshop.utility.Preference;
 
-public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    public FrameLayout frameLayout;
-    ImageView logo;
-    Preference preference;
-    View homeView;
-
-    private float x1,x2;
-    static final int MIN_DISTANCE = 150;
+public class HomeActivity extends BaseActivity
+         {
+    View homeView,infoView;
+             ImageView infoIcon;
+             Animation bottomUp,bottomDown;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        preference=new Preference(this);
+    //    setContentView(R.layout.activity_home);
+        getLayoutInflater().inflate(R.layout.content_home,frameLayout);
+        toolbar.setVisibility(View.GONE);
+        RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        buttonLayoutParams.setMargins(0, 0, 0, 0);
+        frameLayout.setLayoutParams(buttonLayoutParams);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        logo= (ImageView) findViewById(R.id.home_lgo);
-    //    Animation animation= AnimationUtils.loadAnimation(this,R.anim.fade_out);
+       bottomUp = AnimationUtils.loadAnimation(this,
+                R.anim.bottom_up);
+       bottomDown= AnimationUtils.loadAnimation(this,
+               R.anim.bottom_down);
 
-    //    logo.startAnimation(animation);
-        frameLayout= (FrameLayout) findViewById(R.id.contentFrame);
+        infoIcon= (ImageView) findViewById(R.id.info_icon);
+        infoView=findViewById(R.id.info_view);
         homeView=findViewById(R.id.home_view);
+   /*Manoj Says...
+   *    swipe handler implementation
+   * */
         homeView.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
             public void onSwipeLeft() {
@@ -54,53 +61,40 @@ public class HomeActivity extends AppCompatActivity
 
             @Override
             public void onSwipeRight() {
-                Intent intent=new Intent(HomeActivity.this,CartActivity.class);
+                Intent intent=new Intent(HomeActivity.this,AboutUsActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onSwipeBottomToTop() {
+                super.onSwipeBottomToTop();
+                Intent intent=new Intent(HomeActivity.this,ReachUsActivity.class);
                 startActivity(intent);
             }
         });
+/*Manoj Says...
+   *    suggestion displaying
+   * */
+        infoIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              infoView.startAnimation(bottomUp);
+              infoView.setVisibility(View.VISIBLE);
+            }
+        });
+/*Manoj Says...
+   *    suggestion disappearing
+   * */
+        infoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                infoView.startAnimation(bottomDown);
+                infoView.setVisibility(View.GONE);
+            }
+        });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setItemIconTintList(null);
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
-        switch(event.getAction())
-        {
-            case MotionEvent.ACTION_DOWN:
-                x1 = event.getX();
-                break;
-            case MotionEvent.ACTION_UP:
-                x2 = event.getX();
-                float deltaX = x2 - x1;
-                if (Math.abs(deltaX) > MIN_DISTANCE)
-                {
-                    if(x2>x1){}
-                    else
-                    startActivity(new Intent(HomeActivity.this,GalleryActivity.class));
-                }
-                break;
-        }
-        return super.onTouchEvent(event);
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -116,40 +110,6 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_home) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-             startActivity(new Intent(HomeActivity.this,GalleryActivity.class));
-        } else if (id == R.id.nav_education) {
-            startActivity(new Intent(HomeActivity.this,EducationActivity.class));
-        } else if (id == R.id.nav_basket) {
-            startActivity(new Intent(HomeActivity.this,CartActivity.class));
-        }else if (id == R.id.nav_logout) {
-           preference.clearAllPrefereces();
-           Intent intent=new Intent(HomeActivity.this,LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }  else if (id == R.id.nav_about_us) {
-            startActivity(new Intent(HomeActivity.this,AboutUsActivity.class));
-        }else if (id == R.id.nav_reach_us) {
-            startActivity(new Intent(HomeActivity.this,ReachUsActivity.class));
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 }

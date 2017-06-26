@@ -68,6 +68,7 @@ public class GalleryListAdapter extends RecyclerView.Adapter<GalleryListAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder myViewHolder, int i) {
         myViewHolder.title.setText(mListData.get(i).getName());
+        myViewHolder.itemCount.setText(mListData.get(i).getProductCount()+" Item");
         if(i==0)
             myViewHolder.imageView.setImageResource(R.drawable.category_banner_01);
         else if(i==1)
