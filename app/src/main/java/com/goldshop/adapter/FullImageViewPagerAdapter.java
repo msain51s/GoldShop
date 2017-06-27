@@ -1,10 +1,12 @@
 package com.goldshop.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -59,6 +61,7 @@ public class FullImageViewPagerAdapter extends PagerAdapter {
                 false);
 
         productImage = (ImageView) itemView.findViewById(R.id.product_image);
+        productImage.setOnTouchListener((FullImageActivity)context);
         // Capture position and set to the ImageView
 
         Glide.with(context)
@@ -77,6 +80,7 @@ public class FullImageViewPagerAdapter extends PagerAdapter {
         ((ViewPager) container).removeView((FrameLayout) object);
 
     }
+
 }
 
 

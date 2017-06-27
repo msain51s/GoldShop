@@ -1,12 +1,19 @@
 package com.goldshop;
 
+import android.graphics.Matrix;
+import android.graphics.PointF;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.FloatMath;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.goldshop.adapter.FullImageViewPagerAdapter;
 import com.goldshop.adapter.ViewPagerAdapter;
@@ -14,7 +21,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.ArrayList;
 
-public class FullImageActivity extends AppCompatActivity {
+public class FullImageActivity extends AppCompatActivity implements View.OnTouchListener {
 
     Toolbar toolbar;
     ViewPager viewPager;
@@ -22,6 +29,23 @@ public class FullImageActivity extends AppCompatActivity {
     CirclePageIndicator mIndicator;
     ArrayList<String> imageUrlList;
     int position;
+
+
+    public final static String TAG="FullImageActivity";
+    Matrix matrix = new Matrix();
+    Matrix savedMatrix = new Matrix();
+
+    // We can be in one of these 3 states
+    static final int NONE = 0;
+    static final int DRAG = 1;
+    static final int ZOOM = 2;
+    int mode = NONE;
+
+    // Remember some things for zooming
+    PointF start = new PointF();
+    PointF mid = new PointF();
+    float oldDist = 1f;
+    String savedItemClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,5 +86,10 @@ public class FullImageActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return true;
     }
 }

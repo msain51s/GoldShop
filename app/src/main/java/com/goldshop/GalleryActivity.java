@@ -141,6 +141,8 @@ public class GalleryActivity extends BaseActivity implements ResponseListener{
                                     model.setTermId(jsonObject.getString("term_id"));
                                     model.setName(jsonObject.getString("name"));
                                     model.setProductCount(jsonObject.getString("product_count"));
+                                    if(jsonObject.getString("image")!=null && !jsonObject.getString("image").equalsIgnoreCase("null"))
+                                        model.setImageUrl(jsonObject.getString("image"));
 
                                     list.add(model);
                                 }

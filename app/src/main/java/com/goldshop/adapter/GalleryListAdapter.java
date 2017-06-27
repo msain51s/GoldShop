@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.goldshop.CategoryInfoActivity;
 import com.goldshop.GalleryActivity;
 import com.goldshop.R;
@@ -69,12 +70,33 @@ public class GalleryListAdapter extends RecyclerView.Adapter<GalleryListAdapter.
     public void onBindViewHolder(MyViewHolder myViewHolder, int i) {
         myViewHolder.title.setText(mListData.get(i).getName());
         myViewHolder.itemCount.setText(mListData.get(i).getProductCount()+" Item");
-        if(i==0)
-            myViewHolder.imageView.setImageResource(R.drawable.category_banner_01);
-        else if(i==1)
-            myViewHolder.imageView.setImageResource(R.drawable.category_banner_02);
-        else if(i==2)
-            myViewHolder.imageView.setImageResource(R.drawable.category_banner_03);
+        if(i==0) {
+            if(mListData.get(i).getImageUrl()==null)
+              myViewHolder.imageView.setImageResource(R.drawable.category_banner_01);
+            else
+                Glide.with(ctx)
+                        .load(mListData.get(i).getImageUrl())
+                        .placeholder(R.drawable.place_holder)
+                        .into(myViewHolder.imageView);
+        }
+        else if(i==1) {
+            if(mListData.get(i).getImageUrl()==null)
+              myViewHolder.imageView.setImageResource(R.drawable.category_banner_02);
+            else
+                Glide.with(ctx)
+                        .load(mListData.get(i).getImageUrl())
+                        .placeholder(R.drawable.place_holder)
+                        .into(myViewHolder.imageView);
+        }
+        else if(i==2) {
+            if(mListData.get(i).getImageUrl()==null)
+               myViewHolder.imageView.setImageResource(R.drawable.category_banner_03);
+            else
+                Glide.with(ctx)
+                        .load(mListData.get(i).getImageUrl())
+                        .placeholder(R.drawable.place_holder)
+                        .into(myViewHolder.imageView);
+        }
     }
 
     public void removeItem(int position) {
