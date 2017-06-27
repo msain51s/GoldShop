@@ -42,6 +42,7 @@ Preference preference;
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
         toolbarCart = (ImageView) findViewById(R.id.toolbar_cart_icon);
         toolbarTitle= (TextView) findViewById(R.id.toolbar_title_text);
         toolbarTitle.setTypeface(montesarrat_bold);
@@ -104,7 +105,7 @@ Preference preference;
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            // Handle the camera action
+            startActivity(new Intent(BaseActivity.this,HomeActivity.class));
         } else if (id == R.id.nav_gallery) {
             startActivity(new Intent(BaseActivity.this,GalleryActivity.class));
         } else if (id == R.id.nav_education) {
