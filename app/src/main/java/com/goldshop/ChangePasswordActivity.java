@@ -61,19 +61,23 @@ public class ChangePasswordActivity extends AppCompatActivity implements Respons
         View focusView=null;
 
         if(TextUtils.isEmpty(otpValue)){
-            otp.setError("OTP should not be empty !!!");
+            //    otp.setError("OTP should not be empty !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Please Enter OTP !!!");
             focusView=otp;
             cancel=true;
         }else if(TextUtils.isEmpty(newPasswordValue)){
-            newPassword.setError("Password should not be empty !!!");
+            //    newPassword.setError("Password should not be empty !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Please Enter Password !!!");
             focusView=newPassword;
             cancel=true;
         }else if(TextUtils.isEmpty(confirmPasswordValue)){
-            confirmPassword.setError("Confirm Password should not be empty !!!");
+            //    confirmPassword.setError("Confirm Password should not be empty !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Please Enter Confirm Password !!!");
             focusView=confirmPassword;
             cancel=true;
         } else if(!confirmPasswordValue.equals(newPasswordValue)){
-            confirmPassword.setError("Confirm Password didn't match !!!");
+            //   confirmPassword.setError("Confirm Password didn't match !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Confirm Password should be same as Password!!!");
             focusView=confirmPassword;
             cancel=true;
         }

@@ -296,6 +296,7 @@ public class Utils {
         dialog11.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog11.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog11.setContentView(prompt_view);
+        dialog11.setCancelable(false);
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int width = metrics.widthPixels;
         int height = metrics.heightPixels;

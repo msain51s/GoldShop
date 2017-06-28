@@ -70,15 +70,18 @@ public class LoginActivity extends AppCompatActivity implements ResponseListener
         View focusView=null;
 
         if(TextUtils.isEmpty(emailValue)){
-            email.setError("Email should not be empty !!!");
+            //    email.setError("Email should not be empty !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Email should not be empty !!!");
             focusView=email;
             cancel=true;
         }else if(!emailValue.matches(emailPattern)){
-            email.setError("Enter valid email address !!!");
+            //   email.setError("Enter valid email address !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Enter valid email address !!!");
             focusView=email;
             cancel=true;
         }else if(TextUtils.isEmpty(passwordValue)){
-            password.setError("Password should not be empty !!!");
+            //    password.setError("Password should not be empty !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Password should not be empty !!!");
             focusView=password;
             cancel=true;
         }

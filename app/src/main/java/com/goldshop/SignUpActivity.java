@@ -66,43 +66,58 @@ public class SignUpActivity extends AppCompatActivity implements ResponseListene
         View focusView=null;
 
         if(TextUtils.isEmpty(firstNameValue)){
-            firstName.setError("This field is required !!!");
+            //    firstName.setError("This field is required !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Please Enter First Name !!!");
             focusView=firstName;
             cancel=true;
+        }else if(TextUtils.isEmpty(lastNameValue)){
+            //    firstName.setError("This field is required !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Please Enter Last Name !!!");
+            focusView=lastName;
+            cancel=true;
         }else if(TextUtils.isEmpty(companyNameValue)){
-            companyName.setError("This field is required !!!");
+            //    companyName.setError("This field is required !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Please Enter Company Name !!!");
             focusView=companyName;
             cancel=true;
         }else if(TextUtils.isEmpty(cityValue)){
-            city.setError("This field is required !!!");
+            //    city.setError("This field is required !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Please Enter City !!!");
             focusView=city;
             cancel=true;
         }else if(TextUtils.isEmpty(contactNoValue)){
-            contactNo.setError("This field is required !!!");
+            //     contactNo.setError("This field is required !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Please Enter Contact No. !!!");
             focusView=contactNo;
             cancel=true;
         }else if(contactNoValue.length()!=10){
-            contactNo.setError("Contact no should be in 10 digit !!!");
+            //    contactNo.setError("Contact no should be in 10 digit !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Contact no should be in 10 digit !!!");
             focusView=contactNo;
             cancel=true;
         }else if(TextUtils.isEmpty(emailValue)){
-            email.setError("This field is required !!!");
+            //     email.setError("This field is required !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Please Enter Email Address !!!");
             focusView=email;
             cancel=true;
         }else if(!emailValue.matches(emailPattern)){
-            email.setError("Enter valid email address !!!");
+            //    email.setError("Enter valid email address !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Please Enter valid Email Address !!!");
             focusView=email;
             cancel=true;
         }else if(TextUtils.isEmpty(passwordValue)){
-            password.setError("This field is required !!!");
+            //    password.setError("This field is required !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Please Enter Password !!!");
             focusView=password;
             cancel=true;
         }else if(TextUtils.isEmpty(confirmPasswordValue)){
-            confirmPassword.setError("This field is required !!!");
+            //     confirmPassword.setError("This field is required !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Please Enter Confirm Password !!!");
             focusView=confirmPassword;
             cancel=true;
         }else if(!passwordValue.equals(confirmPasswordValue)){
-            confirmPassword.setError("password should be matched !!!");
+            //     confirmPassword.setError("password should be matched !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Confirm Password should be same as Password!!!");
             focusView=confirmPassword;
             cancel=true;
         }

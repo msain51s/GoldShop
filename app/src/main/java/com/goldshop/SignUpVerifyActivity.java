@@ -56,7 +56,8 @@ public class SignUpVerifyActivity extends AppCompatActivity implements ResponseL
         View focusView=null;
 
         if(TextUtils.isEmpty(otpValue)){
-            otp.setError("OTP should not be empty !!!");
+        //    otp.setError("OTP should not be empty !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Please Enter OTP !!!");
             focusView=otp;
             cancel=true;
         }

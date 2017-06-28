@@ -57,11 +57,13 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Respons
         View focusView=null;
 
         if(TextUtils.isEmpty(emailValue)){
-            email.setError("Email should not be empty !!!");
+            //        email.setError("Email should not be empty !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Please Enter Email Address !!!");
             focusView=email;
             cancel=true;
         }else if(!emailValue.matches(emailPattern)){
-            email.setError("Enter valid email address !!!");
+            //        email.setError("Enter valid email address !!!");
+            Utils.showCommonInfoPrompt(this,"Alert","Please Enter valid Email Address !!!");
             focusView=email;
             cancel=true;
         }
