@@ -21,6 +21,7 @@ import com.goldshop.fragment.ManagementFragment;
 import com.goldshop.fragment.NewsFragment;
 import com.goldshop.fragment.ProfileFragment;
 import com.goldshop.utility.FragmentLifecycle;
+import com.goldshop.utility.Preference;
 import com.goldshop.utility.Utils;
 
 import java.util.ArrayList;
@@ -29,11 +30,13 @@ import java.util.List;
 public class AboutUsActivity extends BaseActivity {
 
     WebView webView;
+    Preference preference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
  //       setContentView(R.layout.activity_about_us);
         getLayoutInflater().inflate(R.layout.activity_about_us,frameLayout);
+        preference=new Preference(this);
 
         setupToolbar();
         webView= (WebView) findViewById(R.id.about_us_webview);
@@ -41,6 +44,17 @@ public class AboutUsActivity extends BaseActivity {
         webView.setWebViewClient(new myWebClient());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl("http://shridurgajewellers.com/about-us-mobile/");
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(preference.getCART_COUNT()!=0) {
+            cart_countText.setVisibility(View.VISIBLE);
+            cart_countText.setText(""+preference.getCART_COUNT());
+        }
     }
 
     private void setupToolbar() {

@@ -25,6 +25,7 @@ import com.goldshop.fragment.ManagementFragment;
 import com.goldshop.fragment.NewsFragment;
 import com.goldshop.fragment.ProfileFragment;
 import com.goldshop.utility.FragmentLifecycle;
+import com.goldshop.utility.Preference;
 import com.goldshop.utility.Utils;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import java.util.List;
 
 public class EventActivity extends BaseActivity {
     WebView webView;
+    Preference preference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +41,7 @@ public class EventActivity extends BaseActivity {
         getLayoutInflater().inflate(R.layout.activity_education,frameLayout);
         toolbar.setVisibility(View.VISIBLE);
         toolbarTitle.setText("Event");
+        preference=new Preference(this);
 
         webView= (WebView) findViewById(R.id.event_webview);
 
@@ -46,7 +49,19 @@ public class EventActivity extends BaseActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl("http://shridurgajewellers.com/events/");
 
+
+
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(preference.getCART_COUNT()!=0) {
+            cart_countText.setVisibility(View.VISIBLE);
+            cart_countText.setText(""+preference.getCART_COUNT());
+        }
+    }
+
     public class myWebClient extends WebViewClient
     {
         @Override

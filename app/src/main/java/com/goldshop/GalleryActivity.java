@@ -20,6 +20,7 @@ import com.goldshop.service.Response;
 import com.goldshop.service.ResponseListener;
 import com.goldshop.service.ServerRequest;
 import com.goldshop.utility.Connection;
+import com.goldshop.utility.Preference;
 import com.goldshop.utility.Utils;
 
 import org.json.JSONArray;
@@ -35,6 +36,7 @@ public class GalleryActivity extends BaseActivity implements ResponseListener{
     GalleryListAdapter mAdapter;
     Handler h;
     ImageView toolbarBasket;
+    Preference preference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class GalleryActivity extends BaseActivity implements ResponseListener{
               getLayoutInflater().inflate(R.layout.activity_gallery,frameLayout);
  //       setContentView(R.layout.activity_gallery);
         h=new Handler();
+        preference=new Preference(this);
         toolbar.setVisibility(View.VISIBLE);
         toolbarTitle.setText("Gallery");
 
@@ -57,6 +60,16 @@ public class GalleryActivity extends BaseActivity implements ResponseListener{
         recyclerView.setAdapter(mAdapter);
 
         getAllCategories();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(preference.getCART_COUNT()!=0) {
+            cart_countText.setVisibility(View.VISIBLE);
+            cart_countText.setText(""+preference.getCART_COUNT());
+        }
     }
 
     @Override
@@ -96,7 +109,7 @@ public class GalleryActivity extends BaseActivity implements ResponseListener{
         JSONObject json = new JSONObject();
         try {
 
-            json.put("", "");
+            json.put("userId", preference.getUSER_ID());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -149,13 +162,19 @@ public class GalleryActivity extends BaseActivity implements ResponseListener{
                       //          getSupportActionBar().setTitle("Booking ("+booking_list.size()+")");
                       //          recyclerView.setAdapter(new GalleryListAdapter(GalleryActivity.this,list));
                                 mAdapter.notifyDataSetChanged();
-                                if(!jsonObject.getString("cartCount").equalsIgnoreCase("0")) {
+                                if(jsonObject1.getInt("cartCount")!=0) {
+                                    preference.setCART_COUNT(jsonObject1.getInt("cartCount"));
                                     cart_countText.setVisibility(View.VISIBLE);
-                                    cart_countText.setText(jsonObject.getString("cartCount"));
+                                    cart_countText.setText(""+jsonObject1.getInt("cartCount"));
                                 }
                             }
                             }else{
-                                Toast.makeText(GalleryActivity.this,jsonObject1.getString("msg"),Toast.LENGTH_LONG).show();
+                             //   Toast.makeText(GalleryActivity.this,jsonObject1.getString("msg"),Toast.LENGTH_LONG).show();
+                                   Utils.showCommonInfoPrompt(GalleryActivity.this,"Alert",jsonObject1.getString("msg"));
+                                if(preference.getCART_COUNT()!=0) {
+                                    cart_countText.setVisibility(View.VISIBLE);
+                                    cart_countText.setText(""+preference.getCART_COUNT());
+                                }
                             }
 
                             Log.d("json_response", response.getData());

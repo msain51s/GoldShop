@@ -293,6 +293,7 @@ public class CartActivity extends BaseActivity implements ResponseListener{
                                 itemCountText.setText(list.size() + " item in your cart");
                                 cart_countText.setVisibility(View.VISIBLE);
                                 cart_countText.setText(""+list.size());
+                                preference.setCART_COUNT(list.size());
                             }
                             } else {
                                 Utils.showCommonInfoPrompt(CartActivity.this,"Alert",jsonObject1.getString("msg"));
@@ -322,6 +323,12 @@ public class CartActivity extends BaseActivity implements ResponseListener{
                                 Utils.showCommonInfoPrompt(CartActivity.this,"Success",jsonObject1.getString("msg"));
                                 mAdapter.removeItem(selectedItemPosition);
                                 itemCountText.setText(list.size()+" item in your cart");
+                                preference.setCART_COUNT(list.size());
+                                if(preference.getCART_COUNT()!=0) {
+                                    cart_countText.setVisibility(View.VISIBLE);
+                                    cart_countText.setText(""+preference.getCART_COUNT());
+                                }else
+                                  cart_countText.setVisibility(View.GONE);
                             } else{
                                 Utils.showCommonInfoPrompt(CartActivity.this,"Failed",jsonObject1.getString("msg"));
                             }

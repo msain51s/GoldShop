@@ -78,7 +78,6 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
         mAdapter = new CategoryInfoAdapter(this, list);
         recyclerView.setAdapter(mAdapter);
 
-
         getSelectedCategoryInfo();
 
         toolbarBasket.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +99,17 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
         }else if(addOrUpdate==1){
             updateCartProduct(list.get(position),quantity);
         }
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(preference.getCART_COUNT()!=0) {
+            cart_countText.setVisibility(View.VISIBLE);
+            cart_countText.setText(""+preference.getCART_COUNT());
+        }
+
     }
 
     @Override
@@ -256,6 +266,7 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
         try {
 
             json.put("catID", catId);
+            json.put("userId", preference.getUSER_ID());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -306,9 +317,9 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
                                     model.setPostName(jsonObject.getString("post_name"));
                                     model.setPostModifiedDate(jsonObject.getString("post_modified"));
                                     model.setPostType(jsonObject.getString("post_type"));
-                                    model.setImage(jsonObject.getString("image"));
+                                    model.setImage(jsonObject.getString("imageKey"));
                                     model.setImagePath(jsonObject.getString("imagePath"));
-                                    model.setParent(jsonObject.getString("parent"));
+                            //        model.setParent(jsonObject.getString("parent"));
                                     model.setTermTaxonomyID(jsonObject.getString("term_taxonomy_id"));
 
                                     list.add(model);
@@ -316,10 +327,19 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
                                 //          getSupportActionBar().setTitle("Booking ("+booking_list.size()+")");
                                 //          recyclerView.setAdapter(new GalleryListAdapter(GalleryActivity.this,list));
                                 mAdapter.notifyDataSetChanged();
+                                if(jsonObject1.getInt("cartCount")!=0) {
+                                    preference.setCART_COUNT(jsonObject1.getInt("cartCount"));
+                                    cart_countText.setVisibility(View.VISIBLE);
+                                    cart_countText.setText(""+jsonObject1.getInt("cartCount"));
+                                }
                             }
                             } else {
                              //   Toast.makeText(CategoryInfoActivity.this, jsonObject1.getString("msg"), Toast.LENGTH_LONG).show();
                                 Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Alert",jsonObject1.getString("msg"));
+                                if(preference.getCART_COUNT()!=0) {
+                                    cart_countText.setVisibility(View.VISIBLE);
+                                    cart_countText.setText(""+preference.getCART_COUNT());
+                                }
                             }
 
                             Log.d("json_response", response.getData());
@@ -375,6 +395,10 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
                             String status = jsonObject1.getString("status");
                             if (status.equalsIgnoreCase("true")) {
                                 Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Success",jsonObject1.getString("msg"));
+                                if(preference.getCART_COUNT()!=0) {
+                                    preference.setCART_COUNT(preference.getCART_COUNT() + 1);
+                                    cart_countText.setText(""+preference.getCART_COUNT());
+                                }
                             } else{
                                 Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Failed",jsonObject1.getString("msg"));
                             }

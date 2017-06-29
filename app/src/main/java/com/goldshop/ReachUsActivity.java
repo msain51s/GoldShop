@@ -12,16 +12,19 @@ import android.webkit.WebViewClient;
 
 import com.goldshop.fragment.ManagementFragment;
 import com.goldshop.utility.MyWebView;
+import com.goldshop.utility.Preference;
 import com.goldshop.utility.Utils;
 
 public class ReachUsActivity extends BaseActivity {
 
     WebView webView;
+    Preference preference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
  //       setContentView(R.layout.activity_reach_us);
         getLayoutInflater().inflate(R.layout.activity_reach_us,frameLayout);
+        preference=new Preference(this);
 
         toolbar.setVisibility(View.VISIBLE);
         toolbarTitle.setText("Reach Us");
@@ -31,6 +34,17 @@ public class ReachUsActivity extends BaseActivity {
         webView.setWebViewClient(new myWebClient());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl("http://shridurgajewellers.com/contact-mobi/");
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(preference.getCART_COUNT()!=0) {
+            cart_countText.setVisibility(View.VISIBLE);
+            cart_countText.setText(""+preference.getCART_COUNT());
+        }
     }
 
     public class myWebClient extends WebViewClient
