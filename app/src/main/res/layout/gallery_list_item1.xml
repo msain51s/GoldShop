@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:scaleType="fitXY"
-        android:src="@drawable/category_banner_02"/>
+        />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +22,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/light_blue"
-            android:text="500 ITEM"
            />
 
         <TextView

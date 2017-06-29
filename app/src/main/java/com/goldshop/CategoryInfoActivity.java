@@ -288,7 +288,7 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
                             String status = jsonObject1.getString("status");
                             if (status.equalsIgnoreCase("true")) {
                                 jsonArray = jsonObject1.getJSONArray("record");
-                            }
+
                             CategoryInfo model = null;
                             list.clear();
 
@@ -316,8 +316,10 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
                                 //          getSupportActionBar().setTitle("Booking ("+booking_list.size()+")");
                                 //          recyclerView.setAdapter(new GalleryListAdapter(GalleryActivity.this,list));
                                 mAdapter.notifyDataSetChanged();
+                            }
                             } else {
-                                Toast.makeText(CategoryInfoActivity.this, jsonObject1.getString("msg"), Toast.LENGTH_LONG).show();
+                             //   Toast.makeText(CategoryInfoActivity.this, jsonObject1.getString("msg"), Toast.LENGTH_LONG).show();
+                                Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Alert",jsonObject1.getString("msg"));
                             }
 
                             Log.d("json_response", response.getData());

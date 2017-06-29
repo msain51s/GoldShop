@@ -44,7 +44,7 @@ public class EventActivity extends BaseActivity {
 
         webView.setWebViewClient(new myWebClient());
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("http://shridurgajewellers.com/contact-mobi/");
+        webView.loadUrl("http://shridurgajewellers.com/events/");
 
     }
     public class myWebClient extends WebViewClient

@@ -290,7 +290,9 @@ public class CartActivity extends BaseActivity implements ResponseListener{
                                 }
 
                                 mAdapter.notifyDataSetChanged();
-                                itemCountText.setText(list.size() + " item in your bag");
+                                itemCountText.setText(list.size() + " item in your cart");
+                                cart_countText.setVisibility(View.VISIBLE);
+                                cart_countText.setText(""+list.size());
                             }
                             } else {
                                 Utils.showCommonInfoPrompt(CartActivity.this,"Alert",jsonObject1.getString("msg"));
@@ -319,7 +321,7 @@ public class CartActivity extends BaseActivity implements ResponseListener{
                             if (status.equalsIgnoreCase("true")) {
                                 Utils.showCommonInfoPrompt(CartActivity.this,"Success",jsonObject1.getString("msg"));
                                 mAdapter.removeItem(selectedItemPosition);
-                                itemCountText.setText(list.size()+" item in your bag");
+                                itemCountText.setText(list.size()+" item in your cart");
                             } else{
                                 Utils.showCommonInfoPrompt(CartActivity.this,"Failed",jsonObject1.getString("msg"));
                             }
@@ -382,89 +384,7 @@ public class CartActivity extends BaseActivity implements ResponseListener{
                         }
                     }
 
-                }/*else if (rid == ResponseListener.REQUEST_CHECK_CART_PRODUCTS) {
-
-                    if (response.isError()) {
-                        Toast.makeText(CategoryInfoActivity.this, response.getErrorMsg(),
-                                Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (response.getData() != null) {
-                        try {
-                            JSONObject jsonObject1 = new JSONObject(response.getData());
-                            JSONObject jsonObject = null;
-                            JSONArray jsonArray = null;
-                            String status = jsonObject1.getString("status");
-                            if (status.equalsIgnoreCase("true")) {
-                                jsonObject = jsonObject1.getJSONObject("record");
-                                if(jsonObject!=null) {
-                                    cartId = jsonObject.getString("cart_id");
-                                    Utils.showQuantityPrompt(CategoryInfoActivity.this, list.get(listItemSelectedPosition).getPostTitle(), listItemSelectedPosition, "Please Enter quantity to order", 1, jsonObject.getString("cart_quantity"));
-                                }
-                            }
-                            else if(status.equalsIgnoreCase("false") && jsonObject1.getString("msg").equalsIgnoreCase("No Record found")){
-                                Utils.showQuantityPrompt(CategoryInfoActivity.this,list.get(listItemSelectedPosition).getPostTitle(),listItemSelectedPosition,"Please Enter quantity to order",0,"");
-                            }else{
-                                Toast.makeText(CategoryInfoActivity.this, jsonObject1.getString("msg"), Toast.LENGTH_LONG).show();
-                            }
-
-                            Log.d("json_response", response.getData());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }else if (rid == ResponseListener.REQUEST_ADD_PRODUCT_TO_CART) {
-
-                    if (response.isError()) {
-                        Toast.makeText(CategoryInfoActivity.this, response.getErrorMsg(),
-                                Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (response.getData() != null) {
-                        try {
-                            JSONObject jsonObject1 = new JSONObject(response.getData());
-                            JSONObject jsonObject = null;
-                            JSONArray jsonArray = null;
-                            String status = jsonObject1.getString("status");
-                            if (status.equalsIgnoreCase("true")) {
-                                Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Success",jsonObject1.getString("msg"));
-                            } else{
-                                Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Failed",jsonObject1.getString("msg"));
-                            }
-
-                            Log.d("json_response", response.getData());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }else if (rid == ResponseListener.REQUEST_UPDATE_CART_PRODUCTS) {
-
-                    if (response.isError()) {
-                        Toast.makeText(CategoryInfoActivity.this, response.getErrorMsg(),
-                                Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (response.getData() != null) {
-                        try {
-                            JSONObject jsonObject1 = new JSONObject(response.getData());
-                            JSONObject jsonObject = null;
-                            JSONArray jsonArray = null;
-                            String status = jsonObject1.getString("status");
-                            if (status.equalsIgnoreCase("true")) {
-                                Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Success",jsonObject1.getString("msg"));
-                            } else{
-                                Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Failed",jsonObject1.getString("msg"));
-                            }
-
-                            Log.d("json_response", response.getData());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }*/
+                }
             }
         });
     }

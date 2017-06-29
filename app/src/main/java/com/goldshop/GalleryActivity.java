@@ -129,7 +129,7 @@ public class GalleryActivity extends BaseActivity implements ResponseListener{
                             String status=jsonObject1.getString("status");
                             if(status.equalsIgnoreCase("true")){
                                 jsonArray=jsonObject1.getJSONArray("record");
-                            }
+
                             GalleryModel model = null;
                             list.clear();
 
@@ -149,6 +149,11 @@ public class GalleryActivity extends BaseActivity implements ResponseListener{
                       //          getSupportActionBar().setTitle("Booking ("+booking_list.size()+")");
                       //          recyclerView.setAdapter(new GalleryListAdapter(GalleryActivity.this,list));
                                 mAdapter.notifyDataSetChanged();
+                                if(!jsonObject.getString("cartCount").equalsIgnoreCase("0")) {
+                                    cart_countText.setVisibility(View.VISIBLE);
+                                    cart_countText.setText(jsonObject.getString("cartCount"));
+                                }
+                            }
                             }else{
                                 Toast.makeText(GalleryActivity.this,jsonObject1.getString("msg"),Toast.LENGTH_LONG).show();
                             }
