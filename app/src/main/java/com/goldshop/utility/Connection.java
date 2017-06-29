@@ -5,5 +5,5 @@ package com.goldshop.utility;
  */
 public class Connection {
 
-    public static String BASE_URL="http://prithvirajjewels.com/API/shridurga/";
+    public static String BASE_URL="http://prithvirajjewels.com/API/SDJdemo/";
 }

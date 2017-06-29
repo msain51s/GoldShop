@@ -5,10 +5,7 @@
     android:id="@+id/content_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+
     android:background="@drawable/app_bg"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.goldshop.HomeActivity"
@@ -16,10 +13,20 @@
 
     <ImageView
         android:id="@+id/home_lgo"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/home_screen_produc"/>
+    <ImageView
+        android:id="@+id/home_lgo1"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/login_logo"/>
+        android:src="@drawable/home_screen_logo"
+        android:layout_below="@+id/home_lgo"/>
     <ImageView
         android:id="@+id/info_icon"
         android:layout_width="35dp"
@@ -28,14 +35,15 @@
         android:src="@drawable/ic_action_info"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="70dp"/>
+        android:layout_marginBottom="5dp"/>
 
   <RelativeLayout
       android:id="@+id/info_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:visibility="gone">
-   <LinearLayout
+      android:visibility="visible"
+      android:background="@drawable/suggestion_screen">
+   <!--<LinearLayout
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:orientation="vertical"
@@ -85,6 +93,6 @@
               android:text="Swipe Up"
               android:textColor="@color/white"/>
       </LinearLayout>
-  </RelativeLayout>
+-->  </RelativeLayout>
 
 </RelativeLayout>
