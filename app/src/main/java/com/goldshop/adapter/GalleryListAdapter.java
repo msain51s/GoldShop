@@ -105,6 +105,12 @@ public class GalleryListAdapter extends RecyclerView.Adapter<GalleryListAdapter.
                         .load(mListData.get(i).getImageUrl())
                         .placeholder(R.drawable.place_holder)
                         .into(myViewHolder.imageView);
+        }else{
+            if(mListData.get(i).getImageUrl()!=null)
+                Glide.with(ctx)
+                        .load(mListData.get(i).getImageUrl())
+                        .placeholder(R.drawable.place_holder)
+                        .into(myViewHolder.imageView);
         }
     }
 

@@ -89,7 +89,13 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
         });
     }
 
-    public void productAddToCart(int position,String quantity,int addOrUpdate){
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        getSelectedCategoryInfo();
+    }
+
+    public void productAddToCart(int position, String quantity, int addOrUpdate){
     //    Toast.makeText(this,"quantity-position"+quantity+"-"+position,Toast.LENGTH_LONG).show();
        /* list.get(position).setProduct_quantity(Integer.parseInt(quantity));
         db_handler.addDataToCart(list.get(position));*/
@@ -108,7 +114,8 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
         if(preference.getCART_COUNT()!=0) {
             cart_countText.setVisibility(View.VISIBLE);
             cart_countText.setText(""+preference.getCART_COUNT());
-        }
+        }else
+            cart_countText.setVisibility(View.GONE);
 
     }
 
@@ -395,10 +402,10 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
                             String status = jsonObject1.getString("status");
                             if (status.equalsIgnoreCase("true")) {
                                 Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Success",jsonObject1.getString("msg"));
-                                if(preference.getCART_COUNT()!=0) {
                                     preference.setCART_COUNT(preference.getCART_COUNT() + 1);
+                                    cart_countText.setVisibility(View.VISIBLE);
                                     cart_countText.setText(""+preference.getCART_COUNT());
-                                }
+
                             } else{
                                 Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Failed",jsonObject1.getString("msg"));
                             }

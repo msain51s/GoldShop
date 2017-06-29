@@ -305,10 +305,10 @@ public class ProductDetailActivity extends BaseActivity implements ResponseListe
                             String status = jsonObject1.getString("status");
                             if (status.equalsIgnoreCase("true")) {
                                 Utils.showCommonInfoPrompt(ProductDetailActivity.this,"Success",jsonObject1.getString("msg"));
-                                if(preference.getCART_COUNT()!=0) {
                                     preference.setCART_COUNT(preference.getCART_COUNT() + 1);
+                                    cart_countText.setVisibility(View.VISIBLE);
                                     cart_countText.setText(""+preference.getCART_COUNT());
-                                }
+
                             } else{
                                 Utils.showCommonInfoPrompt(ProductDetailActivity.this,"Failed",jsonObject1.getString("msg"));
                             }

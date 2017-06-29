@@ -59,7 +59,8 @@ public class EventActivity extends BaseActivity {
         if(preference.getCART_COUNT()!=0) {
             cart_countText.setVisibility(View.VISIBLE);
             cart_countText.setText(""+preference.getCART_COUNT());
-        }
+        }else
+            cart_countText.setVisibility(View.GONE);
     }
 
     public class myWebClient extends WebViewClient

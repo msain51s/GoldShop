@@ -72,6 +72,11 @@ public class CartActivity extends BaseActivity implements ResponseListener{
         getCartListAndRefresh();
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        getCartListAndRefresh();
+    }
 
     public void placeOrderClick(View view){
         if(list.size()>0)
