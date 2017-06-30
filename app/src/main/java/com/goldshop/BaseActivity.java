@@ -24,7 +24,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public FrameLayout frameLayout;
 Preference preference;
     Toolbar toolbar;
-    ImageView toolbarCart;
+    ImageView toolbarCart,toolbar_searchIcon;
     TextView toolbarTitle,cart_countText;
     View cartIconView;
     Typeface montesarrat_bold;
@@ -43,6 +43,7 @@ Preference preference;
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
+        toolbar_searchIcon= (ImageView) findViewById(R.id.toolbar_search_icon);
         toolbarCart = (ImageView) findViewById(R.id.toolbar_cart_icon);
         toolbarTitle= (TextView) findViewById(R.id.toolbar_title_text);
         toolbarTitle.setTypeface(montesarrat_bold);
@@ -68,6 +69,7 @@ Preference preference;
                 startActivity(intent);
             }
         });
+
     }
 
     @Override

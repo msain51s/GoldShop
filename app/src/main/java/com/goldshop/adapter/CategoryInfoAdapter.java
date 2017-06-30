@@ -2,6 +2,7 @@ package com.goldshop.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.goldshop.ProductDetailActivity;
 import com.goldshop.R;
 import com.goldshop.model.CategoryInfo;
 import com.goldshop.model.GalleryModel;
+import com.goldshop.utility.FontType;
 import com.goldshop.utility.Utils;
 
 import java.io.File;
@@ -30,9 +32,11 @@ public class CategoryInfoAdapter extends RecyclerView.Adapter<CategoryInfoAdapte
 
     List<CategoryInfo> mListData;
     Context ctx;
+    Typeface monetsarrat_regular;
     public CategoryInfoAdapter(Context ctx, List<CategoryInfo> mListData) {
         this.mListData = mListData;
         this.ctx=ctx;
+        monetsarrat_regular=Utils.getCustomFont(ctx, FontType.MONESTER_RAT_REGULAR);
     }
 
     @Override
@@ -89,6 +93,9 @@ public class CategoryInfoAdapter extends RecyclerView.Adapter<CategoryInfoAdapte
             title= (TextView) itemView.findViewById(R.id.catTitle);
             weight= (TextView) itemView.findViewById(R.id.catWeightText);
             addToBag= (TextView) itemView.findViewById(R.id.addToBagButton);
+
+  //          title.setTypeface(monetsarrat_regular);
+            addToBag.setTypeface(monetsarrat_regular);
 
             addToBag.setOnClickListener(new View.OnClickListener() {
                 @Override
