@@ -37,6 +37,7 @@
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".GalleryActivity"
@@ -75,7 +76,8 @@
         <activity
             android:name=".FullImageActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
+        <activity android:name=".SearchActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

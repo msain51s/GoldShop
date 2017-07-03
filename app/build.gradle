@@ -24,9 +24,15 @@ android {
         javaMaxHeapSize "4g" //specify the heap size for the dex process
     }
 
+
+
     allprojects {
         repositories {
             maven { url "https://jitpack.io" }
+
+            flatDir {
+                dirs 'libs'
+            }
         }
     }
 }
@@ -36,6 +42,9 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile(name: 'material-search', ext: 'aar')
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:support-v4:22.2.0'
     compile 'com.android.support:design:22.2.0'

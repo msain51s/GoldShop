@@ -101,6 +101,7 @@ public class LoginActivity extends AppCompatActivity implements ResponseListener
 
             } else {
              //   Utils.showSnakeBar(layout_view, "internet not connected !!!", Color.RED);Toast.makeText(LoginActivity.this,"Internet not connected !!!",Toast.LENGTH_LONG).show();
+                Utils.showCommonInfoPrompt(this,"Alert","Internet Not Connected !!! please try again later");
                 return;
             }
         }

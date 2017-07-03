@@ -29,6 +29,7 @@ import com.goldshop.ChangePasswordActivity;
 import com.goldshop.LoginActivity;
 import com.goldshop.ProductDetailActivity;
 import com.goldshop.R;
+import com.goldshop.SearchActivity;
 import com.goldshop.SignUpVerifyActivity;
 import com.goldshop.adapter.FilterListAdapter;
 import com.leo.simplearcloader.ArcConfiguration;
@@ -270,6 +271,9 @@ public class Utils {
                         ((CartActivity)context).editItem(position,quantity_value);
                     else if(from.equalsIgnoreCase("ProductDetail"))
                         ((ProductDetailActivity)context).productAddToCart(quantity_value,itemUpdateOrAdd);
+                    else  if(from.equalsIgnoreCase("SearchProduct"))
+                        ((SearchActivity)context).productAddToCart(position,quantity_value,itemUpdateOrAdd);
+
                     dialog11.dismiss();
 
                 }else{

@@ -15,6 +15,7 @@
     <color name="red">#ff0000</color>
     <color name="light_black">#323232</color>
     <color name="green">#38b259</color>
+    <color name="grey">#dedede</color>
 
     <color name="cart_counter_color">#ff0008</color>
 </resources>

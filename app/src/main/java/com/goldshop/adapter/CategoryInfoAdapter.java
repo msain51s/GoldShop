@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.goldshop.CategoryInfoActivity;
 import com.goldshop.ProductDetailActivity;
 import com.goldshop.R;
+import com.goldshop.SearchActivity;
 import com.goldshop.model.CategoryInfo;
 import com.goldshop.model.GalleryModel;
 import com.goldshop.utility.FontType;
@@ -32,10 +33,12 @@ public class CategoryInfoAdapter extends RecyclerView.Adapter<CategoryInfoAdapte
 
     List<CategoryInfo> mListData;
     Context ctx;
+    String from;
     Typeface monetsarrat_regular;
-    public CategoryInfoAdapter(Context ctx, List<CategoryInfo> mListData) {
+    public CategoryInfoAdapter(Context ctx, List<CategoryInfo> mListData,String from) {
         this.mListData = mListData;
         this.ctx=ctx;
+        this.from=from;
         monetsarrat_regular=Utils.getCustomFont(ctx, FontType.MONESTER_RAT_REGULAR);
     }
 
@@ -102,7 +105,10 @@ public class CategoryInfoAdapter extends RecyclerView.Adapter<CategoryInfoAdapte
                 public void onClick(View view) {
            //         Utils.showQuantityPrompt(ctx,mListData.get(getAdapterPosition()).getPostTitle(),getAdapterPosition(),"Please Enter quantity to order");
 
+                    if(from.equalsIgnoreCase("CategoryInfo"))
                     ((CategoryInfoActivity)ctx).checkCartProduct(getAdapterPosition());
+                    else if(from.equalsIgnoreCase("SearchProduct"))
+                        ((SearchActivity)ctx).checkCartProduct(getAdapterPosition());
                 }
             });
         }

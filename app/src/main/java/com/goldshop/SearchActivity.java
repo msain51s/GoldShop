@@ -1,31 +1,32 @@
 package com.goldshop;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
+import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.goldshop.adapter.CategoryInfoAdapter;
-import com.goldshop.adapter.GalleryListAdapter;
-import com.goldshop.db.DB_Handler;
+import com.goldshop.adapter.SearchAdapter;
 import com.goldshop.model.CategoryInfo;
-import com.goldshop.model.GalleryModel;
 import com.goldshop.service.Response;
 import com.goldshop.service.ResponseListener;
 import com.goldshop.service.ServerRequest;
 import com.goldshop.utility.Connection;
 import com.goldshop.utility.Preference;
 import com.goldshop.utility.Utils;
+import com.search.material.library.MaterialSearchView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,72 +34,134 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryInfoActivity extends BaseActivity implements ResponseListener{
+public class SearchActivity extends AppCompatActivity implements ResponseListener{
+
+    Toolbar toolbar;
+    MaterialSearchView searchView;
+    SearchAdapter adapter;
     RecyclerView recyclerView;
     List<CategoryInfo> list;
     CategoryInfoAdapter mAdapter;
-    Handler h;
-    String catId,title,cartId;
     int listItemSelectedPosition=-1;
-    ImageView toolbarBasket;
+    String cartId;
 
-    DB_Handler db_handler;
     Preference preference;
+    Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_category_info);
-        getLayoutInflater().inflate(R.layout.activity_category_info,frameLayout);
-        h = new Handler();
-        db_handler=new DB_Handler(this);
+        setContentView(R.layout.activity_search);
         preference=new Preference(this);
-        Bundle bundle=getIntent().getExtras();
-        if(bundle!=null){
-            catId=bundle.getString("catId");
-            title=bundle.getString("title");
-        }
+        handler=new Handler();
 
-        toolbar.setVisibility(View.VISIBLE);
-        toolbarTitle.setText(title);
-        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar= (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(title);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Search Product");
 
-        toolbarBasket= (ImageView) findViewById(R.id.toolbar_cart_icon);
-        recyclerView = (RecyclerView) findViewById(R.id.categoryInfo_recyclerview);
-
+        recyclerView = (RecyclerView) findViewById(R.id.search_product_recyclerview);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setHasFixedSize(true);
 
         list = new ArrayList<CategoryInfo>();
 
-        mAdapter = new CategoryInfoAdapter(this, list,"CategoryInfo");
+        mAdapter = new CategoryInfoAdapter(this, list,"SearchProduct");
         recyclerView.setAdapter(mAdapter);
 
-        getSelectedCategoryInfo();
+        searchView = (MaterialSearchView) findViewById(R.id.search_view);
+        searchView.showSearch(true);
 
-        toolbarBasket.setOnClickListener(new View.OnClickListener() {
+        adapter = new SearchAdapter(this);
+        searchView.setAdapter(adapter);
+
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(CategoryInfoActivity.this,CartActivity.class);
-                startActivity(intent);
+            public boolean onQueryTextSubmit(String query) {
+            //    Toast.makeText(SearchActivity.this,query,Toast.LENGTH_LONG).show();
+                getSearchProductList(query.trim());
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
             }
         });
+
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+
+            }
+        });
+
+        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+
+    }
+
+  // for voice search handling
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MaterialSearchView.REQUEST_VOICE && resultCode == RESULT_OK) {
+            ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            if (matches != null && matches.size() > 0) {
+                String searchWrd = matches.get(0);
+                if (!TextUtils.isEmpty(searchWrd)) {
+                    searchView.setQuery(searchWrd, false);
+                }
+            }
+
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        getSelectedCategoryInfo();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+
+        MenuItem item = menu.findItem(R.id.action_search);
+        searchView.setMenuItem(item);
+
+        return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id=item.getItemId();
+        if(id==android.R.id.home){
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (searchView.isSearchOpen()) {
+            searchView.closeSearch();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+  /*ADD PRODUCT TO CART*/
+
     public void productAddToCart(int position, String quantity, int addOrUpdate){
-    //    Toast.makeText(this,"quantity-position"+quantity+"-"+position,Toast.LENGTH_LONG).show();
-       /* list.get(position).setProduct_quantity(Integer.parseInt(quantity));
-        db_handler.addDataToCart(list.get(position));*/
+
         listItemSelectedPosition=position;
         if(addOrUpdate==0){
             addProductsToCart(list.get(position),quantity);
@@ -108,58 +171,22 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(preference.getCART_COUNT()!=0) {
-            cart_countText.setVisibility(View.VISIBLE);
-            cart_countText.setText(""+preference.getCART_COUNT());
-        }else
-            cart_countText.setVisibility(View.GONE);
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case android.R.id.home:
-                finish();
-                // Toast.makeText(this, "home pressed", Toast.LENGTH_LONG).show();
-                break;
-
-        }
-
-        return true;
-    }
-
-    public void onFilterClick(View view){
-        Utils.showFilterPrompt(this,"FILTERS");
-    }
-
-    public void onSortClick(View view){
-        Utils.showSortByPrompt(this,"SORT BY");
-    }
-
-  /*SUB CATEGORY CLICK*/
-    public void onSubCategoryClick(View view){}
-
-  /*CHECK CART PRODUCTS*/
+    /*CHECK CART PRODUCTS*/
     public void checkCartProduct(int position){
         listItemSelectedPosition=position;
-        if (Utils.ChechInternetAvalebleOrNot(CategoryInfoActivity.this)) {
+        if (Utils.ChechInternetAvalebleOrNot(SearchActivity.this)) {
 
-            Utils.showLoader(CategoryInfoActivity.this);
+            Utils.showLoader(SearchActivity.this);
             ServerRequest
                     .postRequest(
                             Connection.BASE_URL + "check_cartProducts",
                             getCheckCartProductData(preference.getUSER_ID(),list.get(position).getCatID()),
-                            CategoryInfoActivity.this,
+                            SearchActivity.this,
                             ResponseListener.REQUEST_CHECK_CART_PRODUCTS);
 
         } else {
             //   Utils.shonterwSnakeBar(layout_view, "internet not connected !!!", Color.RED);Toast.makeText(LoginActivity.this,"Internet not connected !!!",Toast.LENGTH_LONG).show();
-            Toast.makeText(CategoryInfoActivity.this, "Internet not connected !!!", Toast.LENGTH_LONG).show();
+            Utils.showCommonInfoPrompt(this,"Alert","Internet Not Connected !!! please try again later");
             return;
         }
     }
@@ -179,19 +206,19 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
 
     /*UPDATE PRODUCTS QUANTITY*/
     public void updateCartProduct(CategoryInfo model,String quantity){
-        if (Utils.ChechInternetAvalebleOrNot(CategoryInfoActivity.this)) {
+        if (Utils.ChechInternetAvalebleOrNot(SearchActivity.this)) {
 
-            Utils.showLoader(CategoryInfoActivity.this);
+            Utils.showLoader(SearchActivity.this);
             ServerRequest
                     .postRequest(
                             Connection.BASE_URL + "update_cartProducts",
                             getUpdateCartProductData(preference.getUSER_ID(),model.getCatID(),quantity),
-                            CategoryInfoActivity.this,
+                            SearchActivity.this,
                             ResponseListener.REQUEST_UPDATE_CART_PRODUCTS);
 
         } else {
             //   Utils.shonterwSnakeBar(layout_view, "internet not connected !!!", Color.RED);Toast.makeText(LoginActivity.this,"Internet not connected !!!",Toast.LENGTH_LONG).show();
-            Toast.makeText(CategoryInfoActivity.this, "Internet not connected !!!", Toast.LENGTH_LONG).show();
+            Utils.showCommonInfoPrompt(this,"Alert","Internet Not Connected !!! please try again later");
             return;
         }
     }
@@ -212,19 +239,19 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
 
     /*ADD PRODUCTS TO CART*/
     public void addProductsToCart(CategoryInfo model,String quantity){
-        if (Utils.ChechInternetAvalebleOrNot(CategoryInfoActivity.this)) {
+        if (Utils.ChechInternetAvalebleOrNot(SearchActivity.this)) {
 
-            Utils.showLoader(CategoryInfoActivity.this);
+            Utils.showLoader(SearchActivity.this);
             ServerRequest
                     .postRequest(
                             Connection.BASE_URL + "save_addToCart",
                             getaddProductsToCartData(model,quantity),
-                            CategoryInfoActivity.this,
+                            SearchActivity.this,
                             ResponseListener.REQUEST_ADD_PRODUCT_TO_CART);
 
         } else {
             //   Utils.shonterwSnakeBar(layout_view, "internet not connected !!!", Color.RED);Toast.makeText(LoginActivity.this,"Internet not connected !!!",Toast.LENGTH_LONG).show();
-            Toast.makeText(CategoryInfoActivity.this, "Internet not connected !!!", Toast.LENGTH_LONG).show();
+            Utils.showCommonInfoPrompt(this,"Alert","Internet Not Connected !!! please try again later");
             return;
         }
     }
@@ -238,7 +265,7 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
             json.put("userId", preference.getUSER_ID());
             json.put("quantity", qty);
             json.put("postimagePath", model.getImagePath());
-            json.put("categoryID", catId);
+            json.put("categoryID", model.getTermTaxonomyID());
             json.put("term_taxonomy_Id", model.getTermTaxonomyID());
 
         } catch (Exception e) {
@@ -248,33 +275,29 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
 
     }
 
+    public void getSearchProductList(String searchText){
+        if (Utils.ChechInternetAvalebleOrNot(SearchActivity.this)) {
 
-    public void getSelectedCategoryInfo() {
-
-        if (Utils.ChechInternetAvalebleOrNot(CategoryInfoActivity.this)) {
-
-            Utils.showLoader(CategoryInfoActivity.this);
+            Utils.showLoader(SearchActivity.this);
             ServerRequest
                     .postRequest(
-                            Connection.BASE_URL + "get_all_products",
-                            getCattegoryInfoData(catId),
-                            CategoryInfoActivity.this,
-                            ResponseListener.REQUEST_CATEGORY_INFO);
+                            Connection.BASE_URL + "get_search_products",
+                            getSearchProductData(searchText),
+                            SearchActivity.this,
+                            ResponseListener.REQUEST_GET_SEARCH_PRODUCT_LIST);
 
         } else {
-            //   Utils.shonterwSnakeBar(layout_view, "internet not connected !!!", Color.RED);Toast.makeText(LoginActivity.this,"Internet not connected !!!",Toast.LENGTH_LONG).show();
-            Toast.makeText(CategoryInfoActivity.this, "Internet not connected !!!", Toast.LENGTH_LONG).show();
+            //   Utils.showSnakeBar(layout_view, "internet not connected !!!", Color.RED);Toast.makeText(LoginActivity.this,"Internet not connected !!!",Toast.LENGTH_LONG).show();
+            Utils.showCommonInfoPrompt(this,"Alert","Internet Not Connected !!! please try again later");
             return;
         }
     }
 
-    public JSONObject getCattegoryInfoData(String catId) {
+    public JSONObject getSearchProductData(String searchText) {
         JSONObject json = new JSONObject();
         try {
-
-            json.put("catID", catId);
-            json.put("userId", preference.getUSER_ID());
-
+            json.put("searchTxt", searchText);
+            json.put("userId",preference.getUSER_ID() );
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -286,15 +309,15 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
     public void onResponse(final Response response, final int rid) {
 
 
-        h.post(new Runnable() {
+        handler.post(new Runnable() {
 
             @Override
             public void run() {
                 Utils.dismissLoader();
-                if (rid == ResponseListener.REQUEST_CATEGORY_INFO) {
+                if (rid == ResponseListener.REQUEST_GET_SEARCH_PRODUCT_LIST) {
 
                     if (response.isError()) {
-                        Toast.makeText(CategoryInfoActivity.this, response.getErrorMsg(),
+                        Toast.makeText(SearchActivity.this, response.getErrorMsg(),
                                 Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -307,46 +330,41 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
                             if (status.equalsIgnoreCase("true")) {
                                 jsonArray = jsonObject1.getJSONArray("record");
 
-                            CategoryInfo model = null;
-                            list.clear();
+                                CategoryInfo model = null;
+                                list.clear();
 
-                            if (jsonArray.length() > 0) {
-                                for (int i = 0; i < jsonArray.length(); i++) {
+                                if (jsonArray.length() > 0) {
+                                    for (int i = 0; i < jsonArray.length(); i++) {
 
-                                    jsonObject = jsonArray.getJSONObject(i);
-                                    model = new CategoryInfo();
-                                    model.setCatID(jsonObject.getInt("ID"));
-                                    model.setPostTitle(jsonObject.getString("post_title"));
-                                    model.setPostDate(jsonObject.getString("post_date"));
-                                    model.setPostContent(jsonObject.getString("post_content"));
-                                    model.setPostExcerpt(jsonObject.getString("post_excerpt"));
-                                    model.setPostStatus(jsonObject.getString("post_status"));
-                                    model.setPostName(jsonObject.getString("post_name"));
-                                    model.setPostModifiedDate(jsonObject.getString("post_modified"));
-                                    model.setPostType(jsonObject.getString("post_type"));
-                                    model.setImage(jsonObject.getString("imageKey"));
-                                    model.setImagePath(jsonObject.getString("imagePath"));
-                            //        model.setParent(jsonObject.getString("parent"));
-                                    model.setTermTaxonomyID(jsonObject.getString("term_taxonomy_id"));
+                                        jsonObject = jsonArray.getJSONObject(i);
+                                        model = new CategoryInfo();
+                                        model.setCatID(jsonObject.getInt("ID"));
+                                        model.setPostTitle(jsonObject.getString("post_title"));
+                                        model.setPostDate(jsonObject.getString("post_date"));
+                                        model.setPostContent(jsonObject.getString("post_content"));
+                                        model.setPostExcerpt(jsonObject.getString("post_excerpt"));
+                                        model.setPostStatus(jsonObject.getString("post_status"));
+                                        model.setPostName(jsonObject.getString("post_name"));
+                                        model.setPostModifiedDate(jsonObject.getString("post_modified"));
+                                        model.setPostType(jsonObject.getString("post_type"));
+                                        model.setImage(jsonObject.getString("imageKey"));
+                                        model.setImagePath(jsonObject.getString("imagePath"));
+                                        //        model.setParent(jsonObject.getString("parent"));
+                                        model.setTermTaxonomyID(jsonObject.getString("term_taxonomy_id"));
 
-                                    list.add(model);
+                                        list.add(model);
+                                    }
+                                    //          getSupportActionBar().setTitle("Booking ("+booking_list.size()+")");
+                                    //          recyclerView.setAdapter(new GalleryListAdapter(GalleryActivity.this,list));
+                                    mAdapter.notifyDataSetChanged();
+                                    if(jsonObject1.getInt("cartCount")!=0) {
+                                        preference.setCART_COUNT(jsonObject1.getInt("cartCount"));
+                                    }
                                 }
-                                //          getSupportActionBar().setTitle("Booking ("+booking_list.size()+")");
-                                //          recyclerView.setAdapter(new GalleryListAdapter(GalleryActivity.this,list));
-                                mAdapter.notifyDataSetChanged();
-                                if(jsonObject1.getInt("cartCount")!=0) {
-                                    preference.setCART_COUNT(jsonObject1.getInt("cartCount"));
-                                    cart_countText.setVisibility(View.VISIBLE);
-                                    cart_countText.setText(""+jsonObject1.getInt("cartCount"));
-                                }
-                            }
                             } else {
-                             //   Toast.makeText(CategoryInfoActivity.this, jsonObject1.getString("msg"), Toast.LENGTH_LONG).show();
-                                Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Alert",jsonObject1.getString("msg"));
-                                if(preference.getCART_COUNT()!=0) {
-                                    cart_countText.setVisibility(View.VISIBLE);
-                                    cart_countText.setText(""+preference.getCART_COUNT());
-                                }
+                                //   Toast.makeText(CategoryInfoActivity.this, jsonObject1.getString("msg"), Toast.LENGTH_LONG).show();
+                                Utils.showCommonInfoPrompt(SearchActivity.this,"Alert",jsonObject1.getString("msg"));
+
                             }
 
                             Log.d("json_response", response.getData());
@@ -358,7 +376,7 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
                 }else if (rid == ResponseListener.REQUEST_CHECK_CART_PRODUCTS) {
 
                     if (response.isError()) {
-                        Toast.makeText(CategoryInfoActivity.this, response.getErrorMsg(),
+                        Toast.makeText(SearchActivity.this, response.getErrorMsg(),
                                 Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -372,13 +390,13 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
                                 jsonObject = jsonObject1.getJSONObject("record");
                                 if(jsonObject!=null) {
                                     cartId = jsonObject.getString("cart_id");
-                                    Utils.showQuantityPrompt(CategoryInfoActivity.this, list.get(listItemSelectedPosition).getPostTitle(), listItemSelectedPosition, "Please Enter quantity to order", 1, jsonObject.getString("cart_quantity"),"CategoryInfo");
+                                    Utils.showQuantityPrompt(SearchActivity.this, list.get(listItemSelectedPosition).getPostTitle(), listItemSelectedPosition, "Please Enter quantity to order", 1, jsonObject.getString("cart_quantity"),"SearchProduct");
                                 }
                             }
                             else if(status.equalsIgnoreCase("false") && jsonObject1.getString("msg").equalsIgnoreCase("No Record found")){
-                                Utils.showQuantityPrompt(CategoryInfoActivity.this,list.get(listItemSelectedPosition).getPostTitle(),listItemSelectedPosition,"Please Enter quantity to order",0,"","CategoryInfo");
+                                Utils.showQuantityPrompt(SearchActivity.this,list.get(listItemSelectedPosition).getPostTitle(),listItemSelectedPosition,"Please Enter quantity to order",0,"","SearchProduct");
                             }else{
-                                Toast.makeText(CategoryInfoActivity.this, jsonObject1.getString("msg"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(SearchActivity.this, jsonObject1.getString("msg"), Toast.LENGTH_LONG).show();
                             }
 
                             Log.d("json_response", response.getData());
@@ -390,7 +408,7 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
                 }else if (rid == ResponseListener.REQUEST_ADD_PRODUCT_TO_CART) {
 
                     if (response.isError()) {
-                        Toast.makeText(CategoryInfoActivity.this, response.getErrorMsg(),
+                        Toast.makeText(SearchActivity.this, response.getErrorMsg(),
                                 Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -401,13 +419,11 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
                             JSONArray jsonArray = null;
                             String status = jsonObject1.getString("status");
                             if (status.equalsIgnoreCase("true")) {
-                                Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Success",jsonObject1.getString("msg"));
-                                    preference.setCART_COUNT(preference.getCART_COUNT() + 1);
-                                    cart_countText.setVisibility(View.VISIBLE);
-                                    cart_countText.setText(""+preference.getCART_COUNT());
+                                Utils.showCommonInfoPrompt(SearchActivity.this,"Success",jsonObject1.getString("msg"));
+                                preference.setCART_COUNT(preference.getCART_COUNT() + 1);
 
                             } else{
-                                Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Failed",jsonObject1.getString("msg"));
+                                Utils.showCommonInfoPrompt(SearchActivity.this,"Failed",jsonObject1.getString("msg"));
                             }
 
                             Log.d("json_response", response.getData());
@@ -419,7 +435,7 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
                 }else if (rid == ResponseListener.REQUEST_UPDATE_CART_PRODUCTS) {
 
                     if (response.isError()) {
-                        Toast.makeText(CategoryInfoActivity.this, response.getErrorMsg(),
+                        Toast.makeText(SearchActivity.this, response.getErrorMsg(),
                                 Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -430,9 +446,9 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
                             JSONArray jsonArray = null;
                             String status = jsonObject1.getString("status");
                             if (status.equalsIgnoreCase("true")) {
-                                Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Success",jsonObject1.getString("msg"));
+                                Utils.showCommonInfoPrompt(SearchActivity.this,"Success",jsonObject1.getString("msg"));
                             } else{
-                                Utils.showCommonInfoPrompt(CategoryInfoActivity.this,"Failed",jsonObject1.getString("msg"));
+                                Utils.showCommonInfoPrompt(SearchActivity.this,"Failed",jsonObject1.getString("msg"));
                             }
 
                             Log.d("json_response", response.getData());
@@ -445,5 +461,4 @@ public class CategoryInfoActivity extends BaseActivity implements ResponseListen
             }
         });
     }
-
 }

@@ -70,6 +70,14 @@ Preference preference;
             }
         });
 
+        toolbar_searchIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(BaseActivity.this,SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -107,7 +115,10 @@ Preference preference;
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            startActivity(new Intent(BaseActivity.this,HomeActivity.class));
+            Intent intent=new Intent(BaseActivity.this,HomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
         } else if (id == R.id.nav_gallery) {
             startActivity(new Intent(BaseActivity.this,GalleryActivity.class));
         } else if (id == R.id.nav_education) {
