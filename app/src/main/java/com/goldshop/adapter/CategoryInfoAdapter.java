@@ -97,7 +97,7 @@ public class CategoryInfoAdapter extends RecyclerView.Adapter<CategoryInfoAdapte
             weight= (TextView) itemView.findViewById(R.id.catWeightText);
             addToBag= (TextView) itemView.findViewById(R.id.addToBagButton);
 
-  //          title.setTypeface(monetsarrat_regular);
+            title.setTypeface(monetsarrat_regular);
             addToBag.setTypeface(monetsarrat_regular);
 
             addToBag.setOnClickListener(new View.OnClickListener() {

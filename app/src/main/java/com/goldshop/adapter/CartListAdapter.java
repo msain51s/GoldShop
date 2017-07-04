@@ -3,6 +3,7 @@ package com.goldshop.adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +20,7 @@ import com.goldshop.CartActivity;
 import com.goldshop.R;
 import com.goldshop.model.CartModel;
 import com.goldshop.model.CategoryInfo;
+import com.goldshop.utility.FontType;
 import com.goldshop.utility.Utils;
 
 import java.util.List;
@@ -31,9 +33,11 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.MyView
 
     List<CartModel> mListData;
     Context ctx;
+    Typeface monetsarrat_regular;
     public CartListAdapter(Context ctx, List<CartModel> mListData) {
         this.mListData = mListData;
         this.ctx=ctx;
+        monetsarrat_regular=Utils.getCustomFont(ctx, FontType.MONESTER_RAT_REGULAR);
     }
 
     @Override
@@ -93,6 +97,8 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.MyView
             itemQuantity= (TextView) itemView.findViewById(R.id.itemQuantity_text);
             edit= (TextView) itemView.findViewById(R.id.itemEdit_text);
             removeItem= (TextView) itemView.findViewById(R.id.cartItemRemove_btn);
+
+            title.setTypeface(monetsarrat_regular);
 
             removeItem.setOnClickListener(new View.OnClickListener() {
                 @Override

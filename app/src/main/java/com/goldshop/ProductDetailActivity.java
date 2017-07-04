@@ -71,7 +71,7 @@ public class ProductDetailActivity extends BaseActivity implements ResponseListe
         productExcerpt= (TextView) findViewById(R.id.product_excerpt_text);
         toolbarBasket= (ImageView) findViewById(R.id.toolbar_cart_icon);
         productExcerpt.setTypeface(montserrat_light);
-        productName.setTypeface(montserrat_regular);
+  //      productName.setTypeface(montserrat_regular);
 
         Bundle bundle=getIntent().getExtras();
         if(bundle!=null){
