@@ -260,7 +260,7 @@ public class SearchActivity extends AppCompatActivity implements ResponseListene
         try {
 
             json.put("postId", model.getCatID());
-            json.put("postName", model.getPostName());
+            json.put("postName", model.getPostTitle());
             json.put("postExcerpt", model.getPostExcerpt());
             json.put("userId", preference.getUSER_ID());
             json.put("quantity", qty);
