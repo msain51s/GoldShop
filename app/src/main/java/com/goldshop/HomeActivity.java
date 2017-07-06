@@ -1,9 +1,13 @@
 package com.goldshop;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -23,14 +27,19 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.goldshop.utility.Connection;
+import com.goldshop.utility.NotificationUtils;
 import com.goldshop.utility.OnSwipeTouchListener;
 import com.goldshop.utility.Preference;
+import com.google.android.gms.common.stats.ConnectionEvent;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class HomeActivity extends BaseActivity
          {
     View homeView,infoView;
              ImageView infoIcon;
              Animation bottomUp,bottomDown;
+             private BroadcastReceiver mRegistrationBroadcastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,9 +111,58 @@ public class HomeActivity extends BaseActivity
         }else
             infoView.setVisibility(View.GONE);
 
+
+
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals(Connection.REGISTRATION_COMPLETE)) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+                    FirebaseMessaging.getInstance().subscribeToTopic(Connection.TOPIC_GLOBAL);
+
+                    Toast.makeText(getApplicationContext(), "Push notification: Enabled on your device" , Toast.LENGTH_LONG).show();
+
+                } else if (intent.getAction().equals(Connection.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                }
+            }
+        };
+
     }
 
-    @Override
+
+             @Override
+             protected void onResume() {
+                 super.onResume();
+
+                 // register GCM registration complete receiver
+                 LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                         new IntentFilter(Connection.REGISTRATION_COMPLETE));
+
+                 // register new push message receiver
+                 // by doing this, the activity will be notified each time a new message arrives
+                 LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                         new IntentFilter(Connection.PUSH_NOTIFICATION));
+
+                 // clear the notification area when the app is opened
+                 NotificationUtils.clearNotifications(getApplicationContext());
+             }
+
+             @Override
+             protected void onPause() {
+                 super.onPause();
+                 LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+             }
+
+             @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);

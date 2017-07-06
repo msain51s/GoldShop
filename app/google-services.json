@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "475243351578",
+    "firebase_url": "https://shree-durga-jewellers.firebaseio.com",
+    "project_id": "shree-durga-jewellers",
+    "storage_bucket": "shree-durga-jewellers.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475243351578:android:4be9a3103af7ba60",
+        "android_client_info": {
+          "package_name": "com.goldshop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "475243351578-4srvn2303bk9hjm5sn155pvvj4v1jov9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaB_PdchaPXLYkm38-AWns5Ig32C_px9U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
