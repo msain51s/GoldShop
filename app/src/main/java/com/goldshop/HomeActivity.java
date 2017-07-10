@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -27,24 +29,36 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.util.Util;
+import com.goldshop.notification_service.MyFirebaseInstanceIDService;
+import com.goldshop.service.Response;
+import com.goldshop.service.ResponseListener;
+import com.goldshop.service.ServerRequest;
+import com.goldshop.utility.Application;
 import com.goldshop.utility.Connection;
 import com.goldshop.utility.NotificationUtils;
 import com.goldshop.utility.OnSwipeTouchListener;
 import com.goldshop.utility.Preference;
+import com.goldshop.utility.Utils;
 import com.google.android.gms.common.stats.ConnectionEvent;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-public class HomeActivity extends BaseActivity
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public class HomeActivity extends BaseActivity implements ResponseListener
          {
     View homeView,infoView;
              ImageView infoIcon;
              Animation bottomUp,bottomDown;
              private BroadcastReceiver mRegistrationBroadcastReceiver;
+     Handler h;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     //    setContentView(R.layout.activity_home);
         getLayoutInflater().inflate(R.layout.content_home,frameLayout);
+        h=new Handler();
         toolbar.setVisibility(View.GONE);
         RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         buttonLayoutParams.setMargins(0, 0, 0, 0);
@@ -136,6 +150,10 @@ public class HomeActivity extends BaseActivity
             }
         };
 
+  /*FCM ID SEND TO SERVER*/
+        if(preference.isFCM_ID_ServerSendTime())
+            sendFCM_ID_ToServer(preference.getAppFCM_ID());
+
     }
 
 
@@ -179,4 +197,85 @@ public class HomeActivity extends BaseActivity
         //noinspection SimplifiableIfStatement
         return super.onOptionsItemSelected(item);
     }
+
+             private void sendFCM_ID_ToServer(String token) {
+
+                 if (Utils.ChechInternetAvalebleOrNot(HomeActivity.this)) {
+
+                     Utils.showLoader(HomeActivity.this);
+                     ServerRequest
+                             .postRequest(
+                                     Connection.BASE_URL + "update_DeviceToken",
+                                     getSendTokenToServerData(preference.getUSER_ID(), token),
+                                     HomeActivity.this,
+                                     ResponseListener.REQUEST_SEND_FCMID_TO_SERVER);
+
+                 } else {
+                     //   Utils.shonterwSnakeBar(layout_view, "internet not connected !!!", Color.RED);Toast.makeText(LoginActivity.this,"Internet not connected !!!",Toast.LENGTH_LONG).show();
+                     Toast.makeText(HomeActivity.this, "Internet not connected !!!", Toast.LENGTH_LONG).show();
+                     return;
+                 }
+             }
+
+             private JSONObject getSendTokenToServerData(String userId, String token) {
+                 JSONObject json = new JSONObject();
+                 try {
+                     json.put("userId", userId);
+                     json.put("token", token);
+                     json.put("deviceType", "1");
+
+                 } catch (Exception e) {
+                     e.printStackTrace();
+                 }
+                 return json;
+
+             }
+
+             @Override
+             public void onResponse(final Response response, final int rid) {
+
+
+                 h.post(new Runnable() {
+
+                     @Override
+                     public void run() {
+                         Utils.dismissLoader();
+                         if (rid == ResponseListener.REQUEST_SEND_FCMID_TO_SERVER) {
+
+                             if (response.isError()) {
+                                 Toast.makeText(Application.mContext, response.getErrorMsg(),
+                                         Toast.LENGTH_SHORT).show();
+                                 return;
+                             }
+                             if (response.getData() != null) {
+                                 try {
+                                     JSONObject jsonObject1 = new JSONObject(response.getData());
+                                     JSONObject jsonObject = null;
+                                     JSONArray jsonArray = null;
+                                     String status = jsonObject1.getString("status");
+                                     if (status.equalsIgnoreCase("true")) {
+                                         preference.setFCM_ID_ServerSendTime(false);
+                                /*Utils.showCommonInfoPrompt(CartActivity.this,"Success",jsonObject1.getString("msg"));
+                                mAdapter.removeItem(selectedItemPosition);
+                                itemCountText.setText(list.size()+" item in your cart");
+                                preference.setCART_COUNT(list.size());
+                                if(preference.getCART_COUNT()!=0) {
+                                    cart_countText.setVisibility(View.VISIBLE);
+                                    cart_countText.setText(""+preference.getCART_COUNT());
+                                }else
+                                    cart_countText.setVisibility(View.GONE);*/
+                                     } else{
+                                         //   Utils.showCommonInfoPrompt(Application.mContext,"Failed",jsonObject1.getString("msg"));
+                                     }
+
+                                     Log.d("json_response", response.getData());
+                                 } catch (Exception e) {
+                                     e.printStackTrace();
+                                 }
+                             }
+
+                         }
+                     }
+                 });
+             }
 }
